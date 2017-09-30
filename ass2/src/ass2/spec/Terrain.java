@@ -4,6 +4,10 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
+
 
 
 /**
@@ -150,6 +154,56 @@ public class Terrain {
         Road road = new Road(width, spine);
         myRoads.add(road);        
     }
+    
+    public void draw(GLAutoDrawable drawable) {
+		GL2 gl = drawable.getGL().getGL2();
+    	drawTerrain(gl);
+    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+
+    	
+    }
+    
+    public void drawTerrain(GL2 gl) {
+    	gl.glPushMatrix();
+		
+    	gl.glColor4d(0, 1, 1, 1);
+    	gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+    	
+    	Dimension size = this.size();
+    	double height = size.getHeight();
+    	double width = size.getWidth();
+//    	int count = 0;
+		gl.glBegin(GL2.GL_TRIANGLES);
+
+    	for (int z = 0; z < (height-1); z++) {
+    		for (int x = 0; x < (width-1); x++) {
+    			double[] p1 = {x, getGridAltitude(x,z), z};
+    			double[] p2 = {x+1, getGridAltitude(x+1,z), z};
+    			double[] p3 = {x, getGridAltitude(x,z+1), z+1};
+    			double[] p4 = {x+1, getGridAltitude(x+1,z+1), z+1};
+    			
+    			gl.glVertex3dv(p1,0);
+    			gl.glVertex3dv(p2,0);
+    			gl.glVertex3dv(p3,0);
+    			gl.glVertex3dv(p4,0);
+    			
+    			
+//    			gl.glVertex3dv(p3,0);
+//    			gl.glVertex3dv(p4,0);
+//    			gl.glVertex3dv(p2,0);
+//    			System.out.println("x: " + x + ", " + 
+//    							   "z: " + z + ", " +
+//    							   "grid(x,z):" + getGridAltitude(x,z));
+//    			System.out.println(p1);
+    		}
+    	}
+    	
+		gl.glEnd();
+
+    	gl.glPopMatrix();
+    	
+    }
+    
 
 
 }

@@ -59,10 +59,22 @@ public class Game extends JFrame implements GLEventListener{
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
-		// TODO Auto-generated method stub
+		GL2 gl = drawable.getGL().getGL2();
+
+		gl.glMatrixMode(GL2.GL_MODELVIEW);
+		gl.glLoadIdentity();
+    	gl.glClearColor(1.0f, 0.7f, 0.5f, 1);
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
+
+        gl.glTranslated(0,0,-4); 
+//		gl.glScaled(0.1, 0.1, 0.1);
+
+		myTerrain.draw(drawable);
+    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+
 		
 	}
-
+	
 	@Override
 	public void dispose(GLAutoDrawable drawable) {
 		// TODO Auto-generated method stub
@@ -71,14 +83,27 @@ public class Game extends JFrame implements GLEventListener{
 
 	@Override
 	public void init(GLAutoDrawable drawable) {
-		// TODO Auto-generated method stub
-		
+    	GL2 gl = drawable.getGL().getGL2();
+    	gl.glEnable(GL2.GL_DEPTH_TEST);
+    	gl.glEnable(GL2.GL_CULL_FACE);
+    	gl.glCullFace(GL2.GL_BACK);
+    	
+//        gl.glEnable(GL2.GL_LIGHTING);
+        
+        // Default light
+//    	gl.glEnable(GL2.GL_LIGHT0); 
+    	
+//        gl.glEnable(GL2.GL_NORMALIZE);
 	}
 
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
-		// TODO Auto-generated method stub
-		
+	   	 GL2 gl = drawable.getGL().getGL2();
+	     
+	     gl.glMatrixMode(GL2.GL_PROJECTION);
+	     gl.glLoadIdentity();
+	    
+	     gl.glOrtho(-2,2,-2,2,1,8);		
 	}
 }
