@@ -63,14 +63,15 @@ public class Game extends JFrame implements GLEventListener{
 
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
-    	gl.glClearColor(1.0f, 0.7f, 0.5f, 1);
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 
-        gl.glTranslated(0,0,-4); 
-//		gl.glScaled(0.1, 0.1, 0.1);
 
-		myTerrain.draw(drawable);
-    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+        gl.glTranslated(-1 ,-1,-5); 
+//    	gl.glRotated ( 60, 0, 1, 0);  //Axis  (1,1,1)
+
+
+		myTerrain.draw(gl);
+//    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
 
 		
 	}
@@ -85,15 +86,18 @@ public class Game extends JFrame implements GLEventListener{
 	public void init(GLAutoDrawable drawable) {
     	GL2 gl = drawable.getGL().getGL2();
     	gl.glEnable(GL2.GL_DEPTH_TEST);
+
+//    	/* Enable Lighting */
+//        gl.glEnable(GL2.GL_LIGHTING);
+//        
+//        // Default light
+//    	gl.glEnable(GL2.GL_LIGHT0); 
+//    	
+//        gl.glEnable(GL2.GL_NORMALIZE);
+    	
+    	/* Cull Back Faces */
     	gl.glEnable(GL2.GL_CULL_FACE);
     	gl.glCullFace(GL2.GL_BACK);
-    	
-//        gl.glEnable(GL2.GL_LIGHTING);
-        
-        // Default light
-//    	gl.glEnable(GL2.GL_LIGHT0); 
-    	
-//        gl.glEnable(GL2.GL_NORMALIZE);
 	}
 
 	@Override

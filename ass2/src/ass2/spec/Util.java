@@ -1,0 +1,24 @@
+package ass2.spec;
+   /* 
+     * Some maths utility functions
+     * Taken from Week 4 Lecture Code
+     * 
+     */
+public class Util {
+	
+    public static double [] cross(double u [], double v[]){
+    	double crossProduct[] = new double[3];
+    	crossProduct[0] = u[1]*v[2] - u[2]*v[1];
+    	crossProduct[1] = u[2]*v[0] - u[0]*v[2];
+    	crossProduct[2] = u[0]*v[1] - u[1]*v[0];
+    	//System.out.println("CP " + crossProduct[0] + " " +  crossProduct[1] + " " +  crossProduct[2]);
+    	return crossProduct;
+    }
+    
+	public static double[] getNormal(double[] p0, double[] p1, double[] p2){
+    	double u[] = {p1[0] - p0[0], p1[1] - p0[1], p1[2] - p0[2]};
+    	double v[] = {p2[0] - p0[0], p2[1] - p0[1], p2[2] - p0[2]};
+    	
+    	return cross(u,v);	
+    }
+}
