@@ -144,45 +144,44 @@ public class Terrain {
         double forwardZ = Math.ceil(z);
         double hypotenuse = (leftX + backZ) - z;
 
-        if (x == (int)x) {
-        		// interpolate z axis
+        if (x == (int)x) { // interpolate z axis
+            altitude = linearInterpolationZ(z, backZ, forwardZ, x, x);
 
+        } else if (z == (int)z) { // interpolate x axis
+        		altitude = linearInterpolationX(x, leftX, rightX, z, z);
 
-        } else if (z == (int)z) {
-        		// interpolate x axis
+        } else if (x < hypotenuse) { // interpolate left triangle
+            altitude = bilinearInterpolation(x, leftX, rightX, z, forwardZ, backZ, hypotenuse);
 
-
-        } else if (x < hypotenuse) {
-        		// interpolate left triangle
-
-
-        } else {
-        		// interpolate right triangle
+        } else { // interpolate right triangle
+        		altitude = bilinearInterpolation(x, rightX, leftX, z, backZ, forwardZ, hypotenuse);
 
         }
 
         return altitude;
     }
 
-    public double interpolateZ(double z, double forwardZ, double backZ, double x) {
-    		// f(R_1) = ( ( (y-y_1)/(y_2-y_1) ) * f(Q_2) ) + ( ( (y_2-y)/(y_2-y_1) ) * f(Q_1) )
+    public double linearInterpolationZ(double z, double backZ, double forwardZ, double x, double p1) {
+    		double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
+    		double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
 
-
-    		return 0;
+    		return  (part1 + part2);
     }
 
-    public double interpolateX(double x, double rightX, double leftX, double z) {
-    	 	// f(R_2) = ( ( (y-y_3)/(y_4-y_3) ) * f(Q_4) ) + ( ( (y_4-y)/(y_4-y_3) ) * f(Q_3) )
+    public double linearInterpolationX(double x, double leftX, double rightX, double z, double p1) {
+    		// needed extra input for bilinear interpolation p1
+    		// p1 = z when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
+		double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)p1) ;
+		double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
 
+		return  (part1 + part2);
+}
 
-		return 0;
-    }
+    public double bilinearInterpolation(double x, double x1, double x2, double z, double z1, double z2, double hyp) {
+    		double part1 = ( (x - x1) / (hyp - x1) ) * linearInterpolationZ(z, z1, z2, x1, x2);
+		double part2 = ( (hyp - x) / (hyp - x1) ) * linearInterpolationZ(z, z1, z1, x1, x1);
 
-    public double bilinearInterpolation(double x, double rightX, double leftX, double z) {
-    		// f(P) = ( ( (x-x_1)/(x_2-x_1) ) * f(R_2) ) + ( ( (x_2-x)/(x_2-x_1) ) * f(R_1) )
-
-
-    		return 0;
+    		return (part1 + part2);
     }
 
     /**
