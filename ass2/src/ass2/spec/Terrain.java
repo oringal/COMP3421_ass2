@@ -161,13 +161,33 @@ public class Terrain {
         return altitude;
     }
 
+    /**
+     * Interpolates the Z axis.
+     * @param z
+     * @param backZ - the negative direction of Z axis / pointing away from us
+     * @param forwardZ - the positive direction of Z axis / pointing towards from us
+     * @param x
+     * @param p1
+     * @return
+     */
     public double linearInterpolationZ(double z, double backZ, double forwardZ, double x, double p1) {
-    		double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
+    		// needed extra input for bilinear interpolation p1
+		// p1 = x when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
+    		double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)p1, (int)forwardZ) ;
     		double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
 
     		return  (part1 + part2);
     }
 
+    /**
+     * Interpolates the X axis.
+     * @param x
+     * @param leftX
+     * @param rightX
+     * @param z
+     * @param p1
+     * @return
+     */
     public double linearInterpolationX(double x, double leftX, double rightX, double z, double p1) {
     		// needed extra input for bilinear interpolation p1
     		// p1 = z when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
@@ -175,11 +195,22 @@ public class Terrain {
 		double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
 
 		return  (part1 + part2);
-}
+    }
 
+    /**
+     * Bilinear interpolation.
+     * @param x
+     * @param x1
+     * @param x2
+     * @param z
+     * @param z1
+     * @param z2
+     * @param hyp
+     * @return
+     */
     public double bilinearInterpolation(double x, double x1, double x2, double z, double z1, double z2, double hyp) {
     		double part1 = ( (x - x1) / (hyp - x1) ) * linearInterpolationZ(z, z1, z2, x1, x2);
-		double part2 = ( (hyp - x) / (hyp - x1) ) * linearInterpolationZ(z, z1, z1, x1, x1);
+		double part2 = ( (hyp - x) / (hyp - x1) ) * linearInterpolationZ(z, z1, z2, x1, x1);
 
     		return (part1 + part2);
     }
@@ -250,7 +281,7 @@ public class Terrain {
     			gl.glVertex3dv(p2,0);
     			gl.glVertex3dv(p3,0);
 //    			gl.glNormal3dv(norm2,0);
-    			gl.glVertex3dv(p4,0);  			
+    			gl.glVertex3dv(p4,0);
 
 //    			System.out.println("#####");
 //    			printArray(p1);
