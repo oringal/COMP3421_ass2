@@ -158,7 +158,7 @@ public class Terrain {
     public void draw(GL2 gl) {
 //		GL2 gl = drawable.getGL().getGL2();
     	drawTerrain(gl);
-    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+//    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
 
     	
     }
@@ -166,7 +166,6 @@ public class Terrain {
     public void drawTerrain(GL2 gl) {
     	gl.glPushMatrix();
 		
-    	gl.glColor4d(0, 1, 1, 1);
 //    	gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
     	
     	Dimension size = this.size();
@@ -174,10 +173,13 @@ public class Terrain {
     	double width = size.getWidth();
 //    	int count = 0;
 
+
     	for (int z = 0; z < (height-1); z++) {
 			gl.glBegin(GL2.GL_TRIANGLE_STRIP);
 
     		for (int x = 0; x < (width-1); x++) {
+    	    	gl.glColor4d(x, getGridAltitude(x,z), z, 1);
+
     			double[] p1 = {x, getGridAltitude(x,z), z};
     			double[] p2 = {x+1, getGridAltitude(x+1,z), z};
     			double[] p3 = {x, getGridAltitude(x,z+1), z+1};
@@ -191,21 +193,7 @@ public class Terrain {
     			gl.glVertex3dv(p2,0);
     			gl.glVertex3dv(p3,0);
 //    			gl.glNormal3dv(norm2,0);
-    			gl.glVertex3dv(p4,0);
-    			
-//    			System.out.println("#####");
-//    			printArray(p1);
-//    			printArray(p2);
-//    			printArray(p3);
-//    			printArray(p4);
-//    			System.out.println("#####");
-
-    			
-//    			if (x == (width -2)){
-//    				gl.glVertex3dv(p2,0);
-//    			}
-
-    			
+    			gl.glVertex3dv(p4,0);  			
     			
     			
 //    			System.out.println("??????????");
