@@ -124,12 +124,12 @@ public class Terrain {
      */
     public double altitude(double x, double z) {
 
-    		double altitude = 0;
+		double altitude = 0;
 
-	    	// If not in frame, return.
-	    	if (x < 0 || x > mySize.width -1 || z < 0 || z > mySize.height -1 ) {
-	    		return altitude;
-	    	}
+    	// If not in frame, return.
+    	if (x < 0 || x > mySize.width -1 || z < 0 || z > mySize.height -1 ) {
+    		return altitude;
+    	}
 
         // grid
         // -------   z
@@ -142,21 +142,36 @@ public class Terrain {
         double rightX = Math.ceil(x);
         double backZ = Math.floor(z); // neg. z direction (away from us. for the drawing above it is the up direction)
         double forwardZ = Math.ceil(z);
-        double hypotenuse = (leftX + backZ) - z;
+//        double hypotenuse = (leftX + backZ) - z;
 
-        if (x == (int)x) { // interpolate z axis
-            altitude = linearInterpolationZ(z, backZ, forwardZ, x, x);
-
-        } else if (z == (int)z) { // interpolate x axis
-        		altitude = linearInterpolationX(x, leftX, rightX, z, z);
-
-        } else if (x < hypotenuse) { // interpolate left triangle
-            altitude = bilinearInterpolation(x, leftX, rightX, z, forwardZ, backZ, hypotenuse);
-
-        } else { // interpolate right triangle
-        		altitude = bilinearInterpolation(x, rightX, leftX, z, backZ, forwardZ, hypotenuse);
-
+        if (x%1 != 0 && z%1 != 0) {
+        	double left = altitude(leftX, z);
+        	double right = altitude(rightX, z);
+        	altitude = (x - leftX)/(rightX - leftX) * right + (rightX - x)/(rightX - leftX) * left;
         }
+        else if (x%1 != 0) { // interpolate z axis
+			// needed extra input for bilinear interpolation p1
+			// p1 = z when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
+        	double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
+        	double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
+			altitude = part1 + part2;
+
+        } else if (z%1 != 0) { // interpolate x axis
+			double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)z) ;
+			double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
+			altitude = part1 + part2;
+
+        } 
+//        else if (x < hypotenuse) { // interpolate left triangle
+//            //altitude = bilinearInterpolation(x, leftX, rightX, z, forwardZ, backZ, hypotenuse);
+//        	
+//
+//        }
+        else { // interpolate right triangle -- get integer coords
+    		//altitude = bilinearInterpolation(x, rightX, leftX, z, backZ, forwardZ, hypotenuse);
+        	altitude = getGridAltitude((int) x, (int) z);
+        }
+        
 
         return altitude;
     }
@@ -170,14 +185,14 @@ public class Terrain {
      * @param p1
      * @return
      */
-    public double linearInterpolationZ(double z, double backZ, double forwardZ, double x, double p1) {
-    		// needed extra input for bilinear interpolation p1
-		// p1 = x when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
-    		double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)p1, (int)forwardZ) ;
-    		double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
-
-    		return  (part1 + part2);
-    }
+//    public double linearInterpolationZ(double z, double backZ, double forwardZ, double x, double p1) {
+//	// needed extra input for bilinear interpolation p1
+//	// p1 = x when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
+//	double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)p1, (int)forwardZ) ;
+//	double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
+//	
+//	return  (part1 + part2);
+//    }
 
     /**
      * Interpolates the X axis.
@@ -188,14 +203,14 @@ public class Terrain {
      * @param p1
      * @return
      */
-    public double linearInterpolationX(double x, double leftX, double rightX, double z, double p1) {
-    		// needed extra input for bilinear interpolation p1
-    		// p1 = z when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
-		double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)p1) ;
-		double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
-
-		return  (part1 + part2);
-    }
+//    public double linearInterpolationX(double x, double leftX, double rightX, double z, double p1) {
+//    		// needed extra input for bilinear interpolation p1
+//    		// p1 = z when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
+//		double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)p1) ;
+//		double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
+//
+//		return  (part1 + part2);
+//    }
 
     /**
      * Bilinear interpolation.
@@ -208,12 +223,12 @@ public class Terrain {
      * @param hyp
      * @return
      */
-    public double bilinearInterpolation(double x, double x1, double x2, double z, double z1, double z2, double hyp) {
-    		double part1 = ( (x - x1) / (hyp - x1) ) * linearInterpolationZ(z, z1, z2, x1, x2);
-		double part2 = ( (hyp - x) / (hyp - x1) ) * linearInterpolationZ(z, z1, z2, x1, x1);
-
-    		return (part1 + part2);
-    }
+//    public double bilinearInterpolation(double x, double x1, double x2, double z, double z1, double z2, double hyp) {
+//		double part1 = ( (x - x1) / (hyp - x1) ) * linearInterpolationZ(z, z1, z2, x1, x2);
+//		double part2 = ( (hyp - x) / (hyp - x1) ) * linearInterpolationZ(z, z1, z2, x1, x1);
+//		
+//		return (part1 + part2);
+//    }
 
     /**
      * Add a tree at the specified (x,z) point.
@@ -243,7 +258,6 @@ public class Terrain {
  // ================= OUR CODE ================= //
 
     public void draw(GL2 gl) {
-//		GL2 gl = drawable.getGL().getGL2();
     	drawTerrain(gl);
 //    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
 
@@ -283,12 +297,14 @@ public class Terrain {
 //    			gl.glNormal3dv(norm2,0);
     			gl.glVertex3dv(p4,0);
 
-//    			System.out.println("#####");
-//    			printArray(p1);
-//    			printArray(p2);
-//    			printArray(p3);
-//    			printArray(p4);
-//    			System.out.println("#####");
+    			System.out.println("#####");
+    			double test1 = altitude(x,z);
+    			System.out.println("value of test1: " + String.valueOf(test1));
+    			printArray(p1);
+    			printArray(p2);
+    			printArray(p3);
+    			printArray(p4);
+    			System.out.println("#####");
 
 
 //    			if (x == (width -2)){
