@@ -66,7 +66,7 @@ public class Game extends JFrame implements GLEventListener{
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 
 
-        gl.glTranslated(0,0,-3); 
+        gl.glTranslated(3,-2,3); 
 //    	gl.glRotated ( 60, 0, 1, 0);  //Axis  (1,1,1)
 
 
