@@ -87,14 +87,12 @@ public class Game extends JFrame implements GLEventListener{
 
 		myTerrain.draw(gl,textures);
 //    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
-
-		
 	}
-	
+
 	@Override
 	public void dispose(GLAutoDrawable drawable) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -132,10 +130,6 @@ public class Game extends JFrame implements GLEventListener{
     	String grassFile = "grass.bmp";
     	String grassExt = "bmp";
     	textures[0] = new Texture(gl,grassFile,grassExt,true);
-    	
-
-    	
-    	
 	}
 
 	@Override
@@ -150,5 +144,6 @@ public class Game extends JFrame implements GLEventListener{
 	     gl.glLoadIdentity();
 	     glu.gluPerspective(60, width/height, 1, 20);
 	     gl.glMatrixMode(GL2.GL_MODELVIEW);
+
 	}
 }

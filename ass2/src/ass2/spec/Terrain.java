@@ -17,150 +17,149 @@ import com.jogamp.opengl.GLAutoDrawable;
  */
 public class Terrain {
 
-    private Dimension mySize;
-    private double[][] myAltitude;
-    private List<Tree> myTrees;
-    private List<Road> myRoads;
-    private float[] mySunlight;
+	private Dimension mySize;
+	private double[][] myAltitude;
+	private List<Tree> myTrees;
+	private List<Road> myRoads;
+	private float[] mySunlight;
 
-    /**
-     * Create a new terrain
-     *
-     * @param width The number of vertices in the x-direction
-     * @param depth The number of vertices in the z-direction
-     */
-    public Terrain(int width, int depth) {
-        mySize = new Dimension(width, depth);
-        myAltitude = new double[width][depth];
-        myTrees = new ArrayList<Tree>();
-        myRoads = new ArrayList<Road>();
-        mySunlight = new float[3];
-    }
+	/**
+	 * Create a new terrain
+	 *
+	 * @param width The number of vertices in the x-direction
+	 * @param depth The number of vertices in the z-direction
+	 */
+	public Terrain(int width, int depth) {
+		mySize = new Dimension(width, depth);
+		myAltitude = new double[width][depth];
+		myTrees = new ArrayList<Tree>();
+		myRoads = new ArrayList<Road>();
+		mySunlight = new float[3];
+	}
 
-    public Terrain(Dimension size) {
-        this(size.width, size.height);
-    }
+	public Terrain(Dimension size) {
+		this(size.width, size.height);
+	}
 
-    public Dimension size() {
-        return mySize;
-    }
+	public Dimension size() {
+		return mySize;
+	}
 
-    public List<Tree> trees() {
-        return myTrees;
-    }
+	public List<Tree> trees() {
+		return myTrees;
+	}
 
-    public List<Road> roads() {
-        return myRoads;
-    }
+	public List<Road> roads() {
+		return myRoads;
+	}
 
-    public float[] getSunlight() {
-        return mySunlight;
-    }
+	public float[] getSunlight() {
+		return mySunlight;
+	}
 
-    /**
-     * Set the sunlight direction.
-     *
-     * Note: the sun should be treated as a directional light, without a position
-     *
-     * @param dx
-     * @param dy
-     * @param dz
-     */
-    public void setSunlightDir(float dx, float dy, float dz) {
-        mySunlight[0] = dx;
-        mySunlight[1] = dy;
-        mySunlight[2] = dz;
-    }
+	/**
+	 * Set the sunlight direction.
+	 *
+	 * Note: the sun should be treated as a directional light, without a position
+	 *
+	 * @param dx
+	 * @param dy
+	 * @param dz
+	 */
+	public void setSunlightDir(float dx, float dy, float dz) {
+		mySunlight[0] = dx;
+		mySunlight[1] = dy;
+		mySunlight[2] = dz;
+	}
 
-    /**
-     * Resize the terrain, copying any old altitudes.
-     *
-     * @param width
-     * @param height
-     */
-    public void setSize(int width, int height) {
-        mySize = new Dimension(width, height);
-        double[][] oldAlt = myAltitude;
-        myAltitude = new double[width][height];
+	/**
+	 * Resize the terrain, copying any old altitudes.
+	 *
+	 * @param width
+	 * @param height
+	 */
+	public void setSize(int width, int height) {
+		mySize = new Dimension(width, height);
+		double[][] oldAlt = myAltitude;
+		myAltitude = new double[width][height];
 
-        for (int i = 0; i < width && i < oldAlt.length; i++) {
-            for (int j = 0; j < height && j < oldAlt[i].length; j++) {
-                myAltitude[i][j] = oldAlt[i][j];
-            }
-        }
-    }
+		for (int i = 0; i < width && i < oldAlt.length; i++) {
+			for (int j = 0; j < height && j < oldAlt[i].length; j++) {
+				myAltitude[i][j] = oldAlt[i][j];
+			}
+		}
+	}
 
-    /**
-     * Get the altitude at a grid point
-     *
-     * @param x
-     * @param z
-     * @return
-     */
-    public double getGridAltitude(int x, int z) {
-        return myAltitude[x][z];
-    }
+	/**
+	 * Get the altitude at a grid point
+	 *
+	 * @param x
+	 * @param z
+	 * @return
+	 */
+	public double getGridAltitude(int x, int z) {
+		return myAltitude[x][z];
+	}
 
-    /**
-     * Set the altitude at a grid point
-     *
-     * @param x
-     * @param z
-     * @return
-     */
-    public void setGridAltitude(int x, int z, double h) {
-        myAltitude[x][z] = h;
-    }
+	/**
+	 * Set the altitude at a grid point
+	 *
+	 * @param x
+	 * @param z
+	 * @return
+	 */
+	public void setGridAltitude(int x, int z, double h) {
+		myAltitude[x][z] = h;
+	}
 
-    /**
-     * Get the altitude at an arbitrary point.
-     * Non-integer points should be interpolated from neighbouring grid points
-     *
-     * TO BE COMPLETED
-     *
-     * @param x
-     * @param z
-     * @return
-     */
-    public double altitude(double x, double z) {
+	/**
+	 * Get the altitude at an arbitrary point.
+	 * Non-integer points should be interpolated from neighbouring grid points
+	 *
+	 * TO BE COMPLETED
+	 *
+	 * @param x
+	 * @param z
+	 * @return
+	 */
+	public double altitude(double x, double z) {
 
 		double altitude = 0;
 
-    	// If not in frame, return.
-    	if (x < 0 || x > mySize.width -1 || z < 0 || z > mySize.height -1 ) {
-    		return altitude;
-    	}
+		// If not in frame, return.
+		if (x < 0 || x > mySize.width -1 || z < 0 || z > mySize.height -1 ) {
+			return altitude;
+		}
 
-        // grid
-        // -------   z
-        // | . / |   ^
-        // |  /. |   |
-        // -------   ----> x
-        // the point can be: left or right of the hypotenuse or on a side of the grid --> 4 cases
+		// grid
+		// -------   z
+		// | . / |   ^
+		// |  /. |   |
+		// -------   ----> x
+		// the point can be: left or right of the hypotenuse or on a side of the grid --> 4 cases
 
-        double leftX = Math.floor(x);
-        double rightX = Math.ceil(x);
-        double backZ = Math.floor(z); // neg. z direction (away from us. for the drawing above it is the up direction)
-        double forwardZ = Math.ceil(z);
-//        double hypotenuse = (leftX + backZ) - z;
+		double leftX = Math.floor(x);
+		double rightX = Math.ceil(x);
+		double backZ = Math.floor(z); // neg. z direction (away from us. for the drawing above it is the up direction)
+		double forwardZ = Math.ceil(z);
+		//        double hypotenuse = (leftX + backZ) - z;
 
-        if (x%1 != 0 && z%1 != 0) {
-        	double left = altitude(leftX, z);
-        	double right = altitude(rightX, z);
-        	altitude = (x - leftX)/(rightX - leftX) * right + (rightX - x)/(rightX - leftX) * left;
-        }
-        else if (x%1 != 0) { // interpolate z axis
+		if (x%1 != 0 && z%1 != 0) {
+			double left = altitude(leftX, z);
+			double right = altitude(rightX, z);
+			altitude = (x - leftX)/(rightX - leftX) * right + (rightX - x)/(rightX - leftX) * left;
+		}
+		else if (x%1 != 0) { // interpolate z axis
 			// needed extra input for bilinear interpolation p1
 			// p1 = z when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
-        	double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
-        	double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
+			double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
+			double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
 			altitude = part1 + part2;
 
-        } else if (z%1 != 0) { // interpolate x axis
+		} else if (z%1 != 0) { // interpolate x axis
 			double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)z) ;
 			double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
 			altitude = part1 + part2;
-
         } 
 //        else if (x < hypotenuse) { // interpolate left triangle
 //            //altitude = bilinearInterpolation(x, leftX, rightX, z, forwardZ, backZ, hypotenuse);
@@ -400,6 +399,4 @@ public class Terrain {
 //        	gl.glPopMatrix();
 //
 //    }
-
-
 }
