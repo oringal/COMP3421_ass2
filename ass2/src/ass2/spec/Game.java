@@ -1,5 +1,7 @@
 package ass2.spec;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import com.jogamp.opengl.*;
@@ -16,16 +18,29 @@ import com.jogamp.opengl.util.FPSAnimator;
  *
  * @author malcolmr
  */
-public class Game extends JFrame implements GLEventListener{
+public class Game extends JFrame implements GLEventListener, KeyListener{
 
 	private Terrain myTerrain;
 	private Texture textures[];
 	private static Boolean debug = true;
+	
+	private Camera camera;
+	
+	private static boolean leftKey;
+	private static boolean rightKey;
+	private static boolean upKey;
+	private static boolean downKey;
 
 	public Game(Terrain terrain) {
 		super("Assignment 2");
 		myTerrain = terrain;
 		textures = new Texture[2];
+		camera = new Camera(myTerrain);
+		
+		leftKey = false;
+		rightKey = false;
+		upKey = false;
+		downKey = false;
 	}
 
 	/** 
@@ -35,7 +50,7 @@ public class Game extends JFrame implements GLEventListener{
 	public void run() {
 		GLProfile glp = GLProfile.getDefault();
 		GLCapabilities caps = new GLCapabilities(glp);
-		GLJPanel panel = new GLJPanel();
+		GLJPanel panel = new GLJPanel(); // should caps be an input to GLJPanel?
 		panel.addGLEventListener(this);
 
 		// Add an animator to call 'display' at 60fps        
@@ -46,7 +61,10 @@ public class Game extends JFrame implements GLEventListener{
 		getContentPane().add(panel);
 		setSize(800, 600);        
 		setVisible(true);
-		setDefaultCloseOperation(EXIT_ON_CLOSE);        
+		setDefaultCloseOperation(EXIT_ON_CLOSE);     
+		
+		Game obj = new Game(myTerrain);
+		panel.addKeyListener(obj);
 	}
 
 	/**
@@ -85,9 +103,14 @@ public class Game extends JFrame implements GLEventListener{
 				0, 1, 0
 				);
 
-
+		
+		// setup the projection matrix with the aspect ratio
+		camera.projectionSetup(gl);
+		
 		myTerrain.draw(gl,textures);
 		// gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+		
+		keyControls();
 	}
 
 	@Override
@@ -139,12 +162,75 @@ public class Game extends JFrame implements GLEventListener{
 		GL2 gl = drawable.getGL().getGL2();
 		GLU glu = new GLU();
 
-		if (height == 0) height = 1;
+		if (height == 0) {
+			height = 1;
+		}
 
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glLoadIdentity();
 		glu.gluPerspective(60, width/height, 1, 20);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
+		
+		camera.setAspectRatio((float) width / (float) height);
 
+	}
+	
+	//========OWN CODE========//
+	
+	private void keyControls() {
+		
+		if (leftKey) {
+			camera.turnLeft();
+		}
+		if (rightKey) {
+			camera.turnRight();
+		}
+		if (upKey) {
+			camera.moveForward();
+		}
+		if (downKey) {
+			camera.moveBackward();
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+	
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			rightKey = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			leftKey = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			upKey = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			downKey = true;
+		}
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		
+		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			leftKey = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			rightKey = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_UP) {
+			upKey = false;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			downKey = false;
+		}		
 	}
 }
