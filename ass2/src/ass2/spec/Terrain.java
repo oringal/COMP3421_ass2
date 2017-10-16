@@ -257,79 +257,86 @@ public class Terrain {
 
  // ================= OUR CODE ================= //
 
-    public void draw(GL2 gl) {
-    	drawTerrain(gl);
+    public void draw(GL2 gl, Texture[] tex) {
+    	drawTerrain(gl, tex);
 //    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
 
 
     }
 
-    public void drawTerrain(GL2 gl) {
+    public void drawTerrain(GL2 gl,Texture[] tex) {
+
+    	
     	gl.glPushMatrix();
-    	gl.glColor4d(0, 1, 1, 1);
+//    	gl.glColor4d(0, 1, 1, 1);
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[0].getTextureId());
+
 
 //    	gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
 
     	Dimension size = this.size();
     	double height = size.getHeight();
     	double width = size.getWidth();
-//    	int count = 0;
 
+    	gl.glBegin(GL2.GL_TRIANGLES);
 
     	for (int z = 0; z < (height-1); z++) {
-			gl.glBegin(GL2.GL_TRIANGLE_STRIP);
+//			gl.glBegin(GL2.GL_TRIANGLE_STRIP);
 
     		for (int x = 0; x < (width-1); x++) {
-    	    	gl.glColor4d(x, getGridAltitude(x,z), z, 1);
+//    	    	gl.glColor4d(x, getGridAltitude(x,z), z, 1);
 
-    			double[] p1 = {x, getGridAltitude(x,z), z};
-    			double[] p2 = {x+1, getGridAltitude(x+1,z), z};
-    			double[] p3 = {x, getGridAltitude(x,z+1), z+1};
-    			double[] p4 = {x+1, getGridAltitude(x+1,z+1), z+1};
+    			double[] p1 = {x, altitude(x,z), z};
+    			double[] p2 = {x+1, altitude(x+1,z), z};
+    			double[] p3 = {x, altitude(x,z+1), z+1};
+    			double[] p4 = {x+1, altitude(x+1,z+1), z+1};
 
-    			double[] norm1 = Util.getNormal(p1, p2, p3);
-    			double[] norm2 = Util.getNormal(p2, p4 ,p3);
+    			double[] norm1 = Util.normalise(Util.getNormal(p1, p2, p3));
+    			double[] norm2 = Util.normalise(Util.getNormal(p2, p4 ,p3));
 
-//    			gl.glNormal3dv(norm1,0);
+    			gl.glNormal3dv(norm1,0);
+    			gl.glTexCoord2d(0, 0);
     			gl.glVertex3dv(p1,0);
-    			gl.glVertex3dv(p2,0);
+    			
+    			gl.glTexCoord2d(0, 1);
     			gl.glVertex3dv(p3,0);
-//    			gl.glNormal3dv(norm2,0);
-    			gl.glVertex3dv(p4,0);
+    			
+    			gl.glTexCoord2d(1, 0);
+    			gl.glVertex3dv(p2,0);
+    			
+    			gl.glNormal3dv(norm2,0);
+    			gl.glTexCoord2d(0, 1);
+    			gl.glVertex3dv(p3,0);
 
-    			System.out.println("#####");
-    			double test1 = altitude(x,z);
-    			System.out.println("value of test1: " + String.valueOf(test1));
-    			printArray(p1);
-    			printArray(p2);
-    			printArray(p3);
-    			printArray(p4);
-    			System.out.println("#####");
+    			gl.glTexCoord2d(1, 1);
+    			gl.glVertex3dv(p4, 0);
+    			
+    			gl.glTexCoord2d(1, 0);
+    			gl.glVertex3dv(p2, 0);
 
 
-//    			if (x == (width -2)){
-//    				gl.glVertex3dv(p2,0);
-//    			}
+//    			System.out.println("#####");
+//    			printArray(p1);
+//    			printArray(p2);
+//    			printArray(p3);
+//    			printArray(p4);
+//    			System.out.println("#####");
 
-//    			System.out.println("??????????");
-//
-//    			System.out.println("x: " + x + ", " +
-//    							   "z: " + z + ", " +
-//    							   "x+1: " + (x+1) + ", "+
-//    								"z+1: " + (z+1) + ", " +
-//    								"##: " + getGridAltitude(x,z) + ", " +
-//    								"##: " + getGridAltitude(x+1,z) + ", " +
-//    								"##: " + getGridAltitude(x,z+1) + ", " +
-//    								"##: " + getGridAltitude(x+1,z+1) + ", ");
-//    			System.out.println("??????????");
     		}
-			gl.glEnd();
 
     	}
-
-
+		gl.glEnd();
     	gl.glPopMatrix();
+    }
 
+    
+    public void setLighting(GL2 gl, double angle){
+    	float [] dir = {-mySunlight[0], mySunlight[1], -mySunlight[2], 0};
+    	gl.glPushMatrix();
+//    		System.out.println(angle);
+    		gl.glRotated(angle, 0, 1, 0);
+    		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, dir, 0);
+    	gl.glPopMatrix();
     }
 
     private void printArray(double[] arr) {

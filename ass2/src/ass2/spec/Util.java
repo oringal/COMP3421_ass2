@@ -21,4 +21,16 @@ public class Util {
     	
     	return cross(u,v);	
     }
+	
+	public static double getMagnitude(double [] n){
+    	double mag = n[0]*n[0] + n[1]*n[1] + n[2]*n[2];
+    	mag = Math.sqrt(mag);
+    	return mag;
+    }
+	
+    public static double [] normalise(double [] n){
+    	double  mag = getMagnitude(n);
+    	double norm[] = {n[0]/mag,n[1]/mag,n[2]/mag};
+    	return norm;
+    }
 }
