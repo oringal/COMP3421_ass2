@@ -10,6 +10,8 @@ import com.jogamp.opengl.GLAutoDrawable;
 
 
 
+
+
 /**
  * COMMENT: Comment HeightMap
  *
@@ -22,6 +24,7 @@ public class Terrain {
 	private List<Tree> myTrees;
 	private List<Road> myRoads;
 	private float[] mySunlight;
+	private Texture grassTexture;
 
 	/**
 	 * Create a new terrain
@@ -198,7 +201,8 @@ public class Terrain {
 
 		gl.glPushMatrix();
 		// gl.glColor4d(0, 1, 1, 1);
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[0].getTextureId());
+		gl.glEnable(GL2.GL_TEXTURE_2D);
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, grassTexture.getTextureId());
 		// gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
 
 		Dimension size = this.size();
@@ -267,5 +271,12 @@ public class Terrain {
 			System.out.print(arr[i] + ", ");
 		}
 		System.out.println();
+	}
+	
+	public void setup(GL2 gl) {
+		String grassFile = "grass.bmp";
+		String grassExt = "bmp";
+		grassTexture = new Texture(gl,grassFile,grassExt,true);
+		
 	}
 }

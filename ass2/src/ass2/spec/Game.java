@@ -12,7 +12,6 @@ import javax.swing.JFrame;
 import com.jogamp.opengl.util.FPSAnimator;
 
 
-
 /**
  * COMMENT: Comment Game 
  *
@@ -25,6 +24,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private static Boolean debug = true;
 	
 	private Camera camera;
+	private Avatar avatar;
 	
 	private static boolean leftKey;
 	private static boolean rightKey;
@@ -36,6 +36,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		myTerrain = terrain;
 		textures = new Texture[2];
 		camera = new Camera(myTerrain);
+		avatar = new Avatar(camera);
 		
 		leftKey = false;
 		rightKey = false;
@@ -50,7 +51,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public void run() {
 		GLProfile glp = GLProfile.getDefault();
 		GLCapabilities caps = new GLCapabilities(glp);
-		GLJPanel panel = new GLJPanel(); // should caps be an input to GLJPanel?
+		GLJPanel panel = new GLJPanel(caps); // put caps as an input to GLJPanel
 		panel.addGLEventListener(this);
 
 		// Add an animator to call 'display' at 60fps        
@@ -105,11 +106,11 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 
 		
 		// setup the projection matrix with the aspect ratio
-		camera.projectionSetup(gl);
+		//camera.projectionSetup(gl);
 		
 		myTerrain.draw(gl,textures);
 		// gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
-		
+		avatar.draw(gl); 
 		keyControls();
 	}
 
@@ -149,11 +150,14 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, sp,0);
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, sh,0);
 
+// moved into Terrain class
 		/* Turn on 2d Textures */
-		gl.glEnable(GL2.GL_TEXTURE_2D); 
-		String grassFile = "grass.bmp";
-		String grassExt = "bmp";
-		textures[0] = new Texture(gl,grassFile,grassExt,true);
+//		gl.glEnable(GL2.GL_TEXTURE_2D); 
+//		String grassFile = "grass.bmp";
+//		String grassExt = "bmp";
+//		textures[0] = new Texture(gl,grassFile,grassExt,true);
+		myTerrain.setup(gl);
+		avatar.setup(gl); // putting textures on avatar
 	}
 
 	@Override
@@ -171,7 +175,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		glu.gluPerspective(60, width/height, 1, 20);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		
-		camera.setAspectRatio((float) width / (float) height);
+		//camera.setAspectRatio((float) width / (float) height);
 
 	}
 	
