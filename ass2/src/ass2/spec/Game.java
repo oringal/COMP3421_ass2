@@ -38,6 +38,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int GRASS = 0;
 	public final static int ROAD = 0;
 	public final static int AVATARBODY = 2;
+	public final static int AVATARHEAD = 3;
 
 	
 	
@@ -173,11 +174,16 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		String roadFile = "textures/road.bmp";
 		String roadExt = "bmp";
 
-		String avatarFile = "textures/minionHead";
-		String avatarExt = "bmp";
+		String avatarHeadFile = "textures/minionHead.bmp";
+		String avatarHeadExt = "bmp";
 		
-		textures[0] = new Texture(gl,grassFile,grassExt,true);
-		//textures[AVATARBODY] = new Texture(gl, avatarFile, avatarExt, true);
+		String avatarBodyFile = "textures/minionBody.png";
+		String avatarBodyExt = "png";
+				
+		textures[GRASS] = new Texture(gl,roadFile,grassExt,true);
+		textures[ROAD] = new Texture(gl,grassFile,roadExt,true);
+		textures[AVATARHEAD] = new Texture(gl, avatarHeadFile, avatarHeadExt, true);
+		textures[AVATARBODY] = new Texture(gl, avatarBodyFile, avatarBodyExt, true);
 	}
 
 	@Override
