@@ -35,7 +35,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private static boolean downKey;
 	
 	public final static int GRASS = 0;
-	public final static int ROAD = 0;
+	public final static int ROAD = 1;
+	public final static int MBODY = 2;
+
 
 	
 	
@@ -112,10 +114,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		
 		// setup the projection matrix with the aspect ratio
 		//camera.projectionSetup(gl);
-		
+		avatar.draw(gl); 
 		myTerrain.draw(gl,textures);
 		gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
-		avatar.draw(gl); 
 		keyControls();
 	}
 
@@ -132,6 +133,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		/* Enable Lighting */
 		gl.glEnable(GL2.GL_DEPTH_TEST);
 		gl.glEnable(GL2.GL_LIGHTING);
+		gl.glEnable(GL2.GL_LIGHT0); 
+
 		gl.glEnable(GL2.GL_NORMALIZE);
 
 		/* Cull Back Faces */
@@ -150,9 +153,12 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		String grassExt = "bmp";
 		String roadFile = "textures/road.bmp";
 		String roadExt = "bmp";
+		String mBodyFile = "textures/minionBody.png";
+		String mBodyExt = "png";
 		
 		textures[Game.GRASS] = new Texture(gl,grassFile,grassExt,true);
 		textures[Game.ROAD] = new Texture(gl,roadFile, roadExt, true);
+		textures[Game.MBODY] = new Texture(gl,mBodyFile, mBodyExt, true);
 	}
 
 	@Override

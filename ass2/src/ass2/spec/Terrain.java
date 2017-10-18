@@ -246,7 +246,7 @@ public class Terrain {
 
 				gl.glTexCoord2d(1, 0);
 				gl.glVertex3dv(p2,0);
-
+// --------------------------------------------------------
 				gl.glNormal3dv(norm2,0);
 				gl.glTexCoord2d(0, 1);
 				gl.glVertex3dv(p3,0);
@@ -273,7 +273,24 @@ public class Terrain {
 	
 	public void drawRoad(GL2 gl, Texture[] tex) {
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.ROAD].getTextureId());
+		
+		/* 
+		 * Find the highest point to place the road on 
+		 * given the terrain
+		 */
 		for (Road r : myRoads) {
+			double maxAlt = 0;
+			for (int i = 0; i < r.size(); i++) {
+				double[] p = r.point(i);
+				double curr = altitude(p[0], p[1]);
+				maxAlt = Math.max(curr,  maxAlt);
+			}
+			r.setAltitude(maxAlt + 0.001);
+		}
+		/*
+		 * Draw Roads
+		 */
+		for (Road r: myRoads) {
 			
 		}
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);

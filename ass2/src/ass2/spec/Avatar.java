@@ -39,7 +39,7 @@ public class Avatar {
 
 		//gl.glEnable(GL2.GL_TEXTURE_2D);
 		//myTextures[0] = new Texture(gl, "textures/minionHead.bmp", "bmp", true);
-		//gl.glBindTexture(GL2.GL_TEXTURE_2D, myTextures[0].getTextureId());
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, myTextures[0].getTextureId());
 		gl.glBegin(GL2.GL_POLYGON);{
 
 			for(int i = 0; i < SLICES; i++)

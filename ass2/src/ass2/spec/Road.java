@@ -3,6 +3,8 @@ package ass2.spec;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jogamp.opengl.GL2;
+
 /**
  * COMMENT: Comment Road 
  *
@@ -12,6 +14,7 @@ public class Road {
 
 	private List<Double> myPoints;
 	private double myWidth;
+	private double altitude;
 
 	/** 
 	 * Create a new road starting at the specified point
@@ -21,6 +24,7 @@ public class Road {
 		myPoints = new ArrayList<Double>();
 		myPoints.add(x0);
 		myPoints.add(y0);
+		altitude = 1;
 	}
 
 	/**
@@ -117,6 +121,17 @@ public class Road {
 
 		return p;
 	}
+	
+	/**
+	 * @param a - the altitude
+	 */
+	public void setAltitude(double a) {
+		altitude = a;
+	}
+	
+	public double alt() {
+		return altitude;
+	}
 
 	/**
 	 * Calculate the Bezier coefficients
@@ -146,7 +161,26 @@ public class Road {
 		throw new IllegalArgumentException("" + i);
 	}
 	
-	public void drawSelf(GL2 gl, ) {
+	public void drawSelf(GL2 gl) {
+		double halfWidth = myWidth/2;
+		
+		gl.glPushMatrix();
+		
+        gl.glBegin(GL2.GL_TRIANGLE_STRIP);
+        double[] upVec = new double[] {0,1,0};
+        gl.glNormal3dv(upVec,0);
+        
+        for (double i = 0; i < size(); i+=0.02) {
+        	double[] currP = point(i);
+        	double[] nextP = point(i+0.02);
+        	
+        	double[] vec = new double[] {nextP[0] - currP[0], 0, nextP[1] - currP[1]};
+        	
+        }
+        
+		
+		gl.glPopMatrix();
+	}
 
 
 }
