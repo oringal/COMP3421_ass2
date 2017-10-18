@@ -68,9 +68,9 @@ public class Camera {
 		}
 	}
 	
-	public void moveVertical(double offset) {
-	    cameraOffset = offset;
-	}
+//	public void moveVertical(double offset) {
+//	    cameraOffset = offset;
+//	}
 
 	public void moveForward() {
 		eyeX -= Math.sin(Math.toRadians(angle)) * WALKING_SPEED;
@@ -90,18 +90,18 @@ public class Camera {
 		angle = (angle - TURNING_SPEED) % 360;
 	}
 	
-	public void tiltUp() {
-		eyeYOffset += TILT_RATE; 
-	}
+//	public void tiltUp() {
+//		eyeYOffset += TILT_RATE; 
+//	}
+//	
+//	public void tiltDown(){
+//		eyeYOffset -= TILT_RATE; 
+//	}
 	
-	public void tiltDown(){
-		eyeYOffset -= TILT_RATE; 
-	}
 	
-	
-	public boolean isFirstPerson() {
-		return firstPerson;
-	}
+//	public boolean isFirstPerson() {
+//		return firstPerson;
+//	}
 	
 	public double getAspectRatio() {
 		return aspectRatio;
@@ -111,17 +111,17 @@ public class Camera {
 		return new double[] {eyeX, eyeY, eyeZ};
 	}
 	
-	public double[] getCenterPosition() {
-		return new double[] {centerX, centerY, centerZ};
-	}
+//	public double[] getCenterPosition() {
+//		return new double[] {centerX, centerY, centerZ};
+//	}
 	
 	public double getAngle() {
 		return angle;
 	}
 	
-	public void toggleFirstPerson() {
-		firstPerson = !firstPerson;
-	}
+//	public void toggleFirstPerson() {
+//		firstPerson = !firstPerson;
+//	}
 	
 	public void setAspectRatio(float aspectRatio) {
 		this.aspectRatio = aspectRatio;
@@ -132,7 +132,12 @@ public class Camera {
 		GLU glu = new GLU();
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glLoadIdentity();
-		glu.gluPerspective(60, aspectRatio, 0.01f, Float.MAX_VALUE);
+		glu.gluPerspective(60, getAspectRatio(), 0.01f, Float.MAX_VALUE);
+//		void gluPerspective(	GLdouble fovy,
+//			 	GLdouble aspect,
+//			 	GLdouble zNear,
+//			 	GLdouble zFar);
+
 	}
 
 }

@@ -33,9 +33,11 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private static boolean rightKey;
 	private static boolean upKey;
 	private static boolean downKey;
+	private static boolean firstPerson;
 	
 	public final static int GRASS = 0;
 	public final static int ROAD = 0;
+	public final static int AVATARBODY = 2;
 
 	
 	
@@ -92,6 +94,10 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
+		
+		// setup the projection matrix with the aspect ratio
+		camera.projectionSetup(gl);
+		
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
@@ -102,20 +108,19 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		// gl.glTranslated(0,0,0); 
 		// gl.glRotated ( 60, 0, 1, 0);  //Axis  (1,1,1)
 		
-		GLU glu = new GLU();
-		glu.gluLookAt(
-				-5, 0, -3, 
-				0, 0, 1, 
-				0, 1, 0
-				);
+//		GLU glu = new GLU();
+//		glu.gluLookAt(
+//				-5, 0, -3, 
+//				0, 0, 1, 
+//				0, 1, 0
+//				);
 
+		avatar.draw(gl, textures);
 		
-		// setup the projection matrix with the aspect ratio
-		//camera.projectionSetup(gl);
 		
 		myTerrain.draw(gl,textures);
 		// gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
-		avatar.draw(gl); 
+		 
 		keyControls();
 	}
 
@@ -159,7 +164,6 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		loadTextures(gl);
 
-		avatar.setup(gl); // putting textures on avatar
 	}
 	
 	private void loadTextures(GL2 gl) {
@@ -169,8 +173,11 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		String roadFile = "textures/road.bmp";
 		String roadExt = "bmp";
 
+		String avatarFile = "textures/minionHead";
+		String avatarExt = "bmp";
 		
 		textures[0] = new Texture(gl,grassFile,grassExt,true);
+		//textures[AVATARBODY] = new Texture(gl, avatarFile, avatarExt, true);
 	}
 
 	@Override
@@ -188,7 +195,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		glu.gluPerspective(60, width/height, 1, 20);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		
-		//camera.setAspectRatio((float) width / (float) height);
+		camera.setAspectRatio((float) width / (float) height);
 
 	}
 	
@@ -197,16 +204,24 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private void keyControls() {
 		
 		if (leftKey) {
-			camera.turnLeft();
+			//System.out.print("left");
+			avatar.turnLeft();
 		}
 		if (rightKey) {
-			camera.turnRight();
+			//System.out.print("right");
+			avatar.turnRight();
 		}
 		if (upKey) {
-			camera.moveForward();
+			//System.out.print("up");
+			avatar.moveForward();
 		}
 		if (downKey) {
-			camera.moveBackward();
+			//System.out.print("down");
+			avatar.moveBackward();
+		}
+		if (firstPerson) {
+			//System.out.print("firstPerson");
+			//avatar.firstPerson()
 		}
 	}
 
@@ -231,6 +246,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			downKey = true;
 		}
+		if (e.getKeyCode() == KeyEvent.VK_F) {
+			firstPerson = true;
+		}
 
 	}
 
@@ -248,6 +266,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		}
 		if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 			downKey = false;
-		}		
+		}	
+		if (e.getKeyCode() == KeyEvent.VK_F) {
+			firstPerson = false;
+		}
 	}
 }
