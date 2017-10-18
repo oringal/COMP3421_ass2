@@ -7,6 +7,7 @@ public class Avatar {
 	// used lecture code week 8 TexCylindar to draw cylinder
 
 	private static final double WALKING_SPEED = 10;
+	private static final double ROTATE_SPEED = 5;
 	
 	private double angleX = 0;
 	private double angleY = 0;
@@ -37,15 +38,15 @@ public class Avatar {
 //			return;
 //		}
 		
-//		double[] cameraPosition = camera.getPosition();
-//		gl.glTranslated(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
-//		gl.glRotated(camera.getAngle(), 0, 1, 0);
+		double[] cameraPosition = camera.getPosition();
+		gl.glTranslated(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+		gl.glRotated(camera.getAngle(), 0, 1, 0);
 		
 		// Commands to turn the cylinder.
 		gl.glRotated(angleZ, 0.0, 0.0, 1.0);
 		gl.glRotated(angleY, 0.0, 1.0, 0.0);
 		gl.glRotated(angleX, 1.0, 0.0, 0.0);
-		gl.glTranslated(0, 0 , 3);
+		//gl.glTranslated(0, 0 , 3);
 		//gl.glTranslated(moveX, moveY, moveZ);
 
 		double angleIncrement = (Math.PI * 2.0) / SLICES;
@@ -104,19 +105,24 @@ public class Avatar {
 	
 	public void moveForward() {
 		//moveX = (moveX + WALKING_SPEED);
+		angleZ = angleZ + ROTATE_SPEED;
 		camera.moveForward();
 	}
 
 	public void moveBackward() {
 		//moveX = (moveX - WALKING_SPEED);
+		//angleZ = angleZ - ROTATE_SPEED;
+		
 		camera.moveBackward();
 	}
 
 	public void turnLeft() {
+		//angleX = angleX - ROTATE_SPEED;
 		camera.turnLeft();
 	}
 
 	public void turnRight() {
+		//angleX = angleX + ROTATE_SPEED;
 		camera.turnRight();
 	}
 	

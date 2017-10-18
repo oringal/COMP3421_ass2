@@ -53,19 +53,19 @@ public class Camera {
 		
 		
 
-		if (firstPerson) {
-			double fpYOffset = eyeYOffset - 0.3;
-			centerX = eyeX + (Math.sin(Math.toRadians((angle + 180) % 360)) * FIRST_PERSON_RADIUS);
-			centerY = eyeY + 1.5;
-			centerZ = eyeZ + (Math.cos(Math.toRadians((angle + 180) % 360)) * FIRST_PERSON_RADIUS);
-			glu.gluLookAt(eyeX, eyeY + fpYOffset + cameraOffset, eyeZ, centerX, centerY + cameraOffset, centerZ, 0, 1, 0);
-		} else {
+//		if (firstPerson) {
+//			double fpYOffset = eyeYOffset - 0.3;
+//			centerX = eyeX + (Math.sin(Math.toRadians((angle + 180) % 360)) * FIRST_PERSON_RADIUS);
+//			centerY = eyeY + 1.5;
+//			centerZ = eyeZ + (Math.cos(Math.toRadians((angle + 180) % 360)) * FIRST_PERSON_RADIUS);
+//			glu.gluLookAt(eyeX, eyeY + fpYOffset + cameraOffset, eyeZ, centerX, centerY + cameraOffset, centerZ, 0, 1, 0);
+//		} else {
 			centerX = eyeX + (Math.sin(Math.toRadians(angle)) * THIRD_PERSON_RADIUS);
 			centerY = eyeY + eyeYOffset + cameraOffset;
 			centerZ = eyeZ + (Math.cos(Math.toRadians(angle)) * THIRD_PERSON_RADIUS);
 			glu.gluLookAt(centerX, centerY, centerZ, eyeX, eyeY + cameraOffset, eyeZ, 0, 1, 0);
 
-		}
+//		}
 	}
 	
 //	public void moveVertical(double offset) {
