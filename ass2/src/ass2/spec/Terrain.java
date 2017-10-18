@@ -220,6 +220,7 @@ public class Terrain {
         gl.glDisable(GL2.GL_CULL_FACE);
         drawRoads(gl,tex);
         gl.glEnable(GL2.GL_CULL_FACE);
+        drawTrees(gl,tex);
 
 	}
 
@@ -237,13 +238,13 @@ public class Terrain {
 //		gl.glBegin(GL2.GL_TRIANGLE_STRIP);
 
 
-		for (int z = 0; z < (height-1); z++) {
+		for (double z = 0; z < (height-1); z+=1) {
 
-			for (int x = 0; x < (width-1); x++) {
-				double[] p1 = {x, getGridAltitude(x,z), z};
-				double[] p2 = {x+1, getGridAltitude(x+1,z), z};
-				double[] p3 = {x, getGridAltitude(x,z+1), z+1};
-				double[] p4 = {x+1, getGridAltitude(x+1,z+1), z+1};
+			for (double x = 0; x < (width-1); x+=1) {
+				double[] p1 = {x, altitude(x,z), z};
+				double[] p2 = {x+1, altitude(x+1,z), z};
+				double[] p3 = {x, altitude(x,z+1), z+1};
+				double[] p4 = {x+1, altitude(x+1,z+1), z+1};
 
 				double[] norm1 = Util.normalise(Util.getNormal(p1, p2, p3));
 				double[] norm2 = Util.normalise(Util.getNormal(p2, p4 ,p3));
@@ -298,7 +299,7 @@ public class Terrain {
 				maxAlt = Math.max(curr,  maxAlt);
 			}
 //	        if (Game.debug) System.out.println("MaxALt: " + maxAlt);
-			r.setAltitude(maxAlt + 0.05);
+			r.setAltitude(maxAlt + 0.1);
 		}
 		/*
 		 * Draw Roads
@@ -307,6 +308,16 @@ public class Terrain {
 			r.drawSelf(gl, tex);
 		}
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+	}
+	
+	public void drawTrees(GL2 gl, Texture[] tex) {
+		for (Tree t : myTrees) {
+//			double[] p = t.getPosition();
+//			double alt = altitude(p[0],p[1]);
+			t.drawTree(gl, tex);
+			gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+
+		}
 	}
 
 
