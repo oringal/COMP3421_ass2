@@ -36,8 +36,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private static boolean firstPerson;
 	
 	public final static int GRASS = 0;
-	public final static int ROAD = 0;
+	public final static int ROAD = 1;
 	public final static int AVATARBODY = 2;
+	public final static int AVATARHEAD = 3;
 
 	
 	
@@ -102,7 +103,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
 
-		myTerrain.setLighting(gl, 0);
+		myTerrain.setLight(gl, 0);
 		gl.glEnable(GL2.GL_LIGHT0);
 
 		// gl.glTranslated(0,0,0); 
@@ -117,10 +118,11 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 
 		avatar.draw(gl, textures);
 		
-		
+		// setup the projection matrix with the aspect ratio
+		//camera.projectionSetup(gl);
 		myTerrain.draw(gl,textures);
-		// gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
-		 
+		gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+
 		keyControls();
 	}
 
@@ -138,27 +140,12 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glEnable(GL2.GL_DEPTH_TEST);
 		gl.glEnable(GL2.GL_LIGHTING);
 		gl.glEnable(GL2.GL_LIGHT0); 
+
 		gl.glEnable(GL2.GL_NORMALIZE);
-
-
-		float ambLight0[] = {0.3f,0.3f,0.3f,1.0f};
-		float difLight0[] = {1.0f,1.0f,1.0f,1.0f};
-		float specLight0[] = {1.0f,1.0f,1.0f,1.0f};
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambLight0, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, difLight0, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, specLight0, 0);
 
 		/* Cull Back Faces */
 		gl.glEnable(GL2.GL_CULL_FACE);
 		gl.glCullFace(GL2.GL_BACK);
-
-
-		float [] ad = {1.0f, 1.0f, 1.0f, 1.0f}; 
-		float [] sp = {0.2f, 0.2f, 0.2f, 1.0f}; 
-		float [] sh = {0f, 0f, 0f, 1.0f}; 
-		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, ad,0);
-		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, sp,0);
-		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, sh,0);
 
 		/* Turn on 2d Textures */
 		gl.glEnable(GL2.GL_TEXTURE_2D);
@@ -173,11 +160,17 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		String roadFile = "textures/road.bmp";
 		String roadExt = "bmp";
 
-		String avatarFile = "textures/minionHead";
-		String avatarExt = "bmp";
+		String avatarHeadFile = "textures/minionHead.bmp";
+		String avatarHeadExt = "bmp";
 		
-		textures[0] = new Texture(gl,grassFile,grassExt,true);
-		//textures[AVATARBODY] = new Texture(gl, avatarFile, avatarExt, true);
+		String avatarBodyFile = "textures/minionBody.png";
+		String avatarBodyExt = "png";
+				
+		textures[GRASS] = new Texture(gl,grassFile,grassExt,true);
+		textures[ROAD] = new Texture(gl,roadFile,roadExt,true);
+		textures[AVATARHEAD] = new Texture(gl, avatarHeadFile, avatarHeadExt, true);
+		textures[AVATARBODY] = new Texture(gl, avatarBodyFile, avatarBodyExt, true);
+
 	}
 
 	@Override

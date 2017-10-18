@@ -24,6 +24,8 @@ public class Terrain {
 	private List<Tree> myTrees;
 	private List<Road> myRoads;
 	private float[] mySunlight;
+	private Light  myLight;
+
 
 	/**
 	 * Create a new terrain
@@ -37,6 +39,8 @@ public class Terrain {
 		myTrees = new ArrayList<Tree>();
 		myRoads = new ArrayList<Road>();
 		mySunlight = new float[3];
+		myLight = new Light();
+
 	}
 
 	public Terrain(Dimension size) {
@@ -146,20 +150,28 @@ public class Terrain {
 		double forwardZ = Math.ceil(z);
 
 		if (x%1 != 0 && z%1 != 0) { // both not integers
+			if(Game.debug) System.out.println("in 1");
 			double left = altitude(leftX, z);
 			double right = altitude(rightX, z);
 			altitude = (x - leftX)/(rightX - leftX) * right + (rightX - x)/(rightX - leftX) * left;
 			
 		} else if (x%1 != 0) { // interpolate z axis
-			double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
-			double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
+			if(Game.debug) System.out.println("in 2");
+//			if(Game.debug) System.out.println(z + " ," + backZ + " ," + forwardZ);
+			double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)z) ;
+			double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
+			
+			if(Game.debug) System.out.println("part1: " + part1 + " part2: " + part2);
 			altitude = part1 + part2;
 
 		} else if (z%1 != 0) { // interpolate x axis
-			double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)z) ;
-			double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
+			if(Game.debug) System.out.println("in 3");
+			double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
+			double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
 			altitude = part1 + part2;
 		} else { // both are integers
+			if(Game.debug) System.out.println("in 4");
+
 			altitude = getGridAltitude((int) x, (int) z);
 		}
 
@@ -189,38 +201,49 @@ public class Terrain {
 		Road road = new Road(width, spine);
 		myRoads.add(road);
 	}
-
-	public void draw(GL2 gl, Texture[] tex) {
-		drawTerrain(gl, tex);
-		// gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+	
+	public void setLight(GL2 gl, double angle) {
+		this.myLight.setLight(gl, mySunlight, angle);
 	}
 
-	public void drawTerrain(GL2 gl,Texture[] tex) {
+	public void draw(GL2 gl, Texture[] tex) {
+		
+		/* Material properties */
+		float [] ad = {1.0f, 1.0f, 1.0f, 1.0f}; 
+		float [] sp = {0.2f, 0.2f, 0.2f, 1.0f}; 
+		float [] sh = {0f, 0f, 0f, 1.0f}; 
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, ad,0);
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, sp,0);
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, sh,0);
+		
+		drawTerrain(gl, tex);
+        gl.glDisable(GL2.GL_CULL_FACE);
+        drawRoads(gl,tex);
+        gl.glEnable(GL2.GL_CULL_FACE);
 
+	}
+
+	public void drawTerrain(GL2 gl, Texture[] tex) {
 
 		gl.glPushMatrix();
-		// gl.glColor4d(0, 1, 1, 1);
 		gl.glEnable(GL2.GL_TEXTURE_2D);
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[0].getTextureId());
-		// gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.GRASS].getTextureId());
 
 		Dimension size = this.size();
 		double height = size.getHeight();
 		double width = size.getWidth();
 
-//		gl.glBegin(GL2.GL_TRIANGLES);
-		gl.glBegin(GL2.GL_TRIANGLE_STRIP);
+		gl.glBegin(GL2.GL_TRIANGLES);
+//		gl.glBegin(GL2.GL_TRIANGLE_STRIP);
 
 
 		for (int z = 0; z < (height-1); z++) {
 
 			for (int x = 0; x < (width-1); x++) {
-				// gl.glColor4d(x, getGridAltitude(x,z), z, 1);
-
-				double[] p1 = {x, altitude(x,z), z};
-				double[] p2 = {x+1, altitude(x+1,z), z};
-				double[] p3 = {x, altitude(x,z+1), z+1};
-				double[] p4 = {x+1, altitude(x+1,z+1), z+1};
+				double[] p1 = {x, getGridAltitude(x,z), z};
+				double[] p2 = {x+1, getGridAltitude(x+1,z), z};
+				double[] p3 = {x, getGridAltitude(x,z+1), z+1};
+				double[] p4 = {x+1, getGridAltitude(x+1,z+1), z+1};
 
 				double[] norm1 = Util.normalise(Util.getNormal(p1, p2, p3));
 				double[] norm2 = Util.normalise(Util.getNormal(p2, p4 ,p3));
@@ -234,7 +257,7 @@ public class Terrain {
 
 				gl.glTexCoord2d(1, 0);
 				gl.glVertex3dv(p2,0);
-
+// --------------------------------------------------------
 				gl.glNormal3dv(norm2,0);
 				gl.glTexCoord2d(0, 1);
 				gl.glVertex3dv(p3,0);
@@ -245,26 +268,47 @@ public class Terrain {
 				gl.glTexCoord2d(1, 0);
 				gl.glVertex3dv(p2, 0);
 
-				//    			System.out.println("#####");
-				//    			printArray(p1);
-				//    			printArray(p2);
-				//    			printArray(p3);
-				//    			printArray(p4);
-				//    			System.out.println("#####");
+//    			if (Game.debug) System.out.println("#####");
+//    			printArray(p1);
+//    			printArray(p2);
+//    			printArray(p3);
+//    			printArray(p4);
+//    			if (Game.debug) System.out.println("#####");
 			}
 		}
 		gl.glEnd();
 		gl.glPopMatrix();
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+
+	}
+	
+	public void drawRoads(GL2 gl, Texture[] tex) {
+		
+		/* 
+		 * Find the highest point to place the road on 
+		 * given the terrain
+		 */
+		for (Road r : myRoads) {
+			double maxAlt = 0;
+			for (int i = 0; i < r.size(); i++) {
+				double[] p = r.point(i);
+				if (Game.debug) System.out.println("points: " + p[0]+ ", " + p[1]);
+				double curr = altitude(p[0], p[1]);
+		        if (Game.debug) System.out.println("curr: " + curr);
+				maxAlt = Math.max(curr,  maxAlt);
+			}
+//	        if (Game.debug) System.out.println("MaxALt: " + maxAlt);
+			r.setAltitude(maxAlt + 0.05);
+		}
+		/*
+		 * Draw Roads
+		 */
+		for (Road r: myRoads) {
+			r.drawSelf(gl, tex);
+		}
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 	}
 
-	public void setLighting(GL2 gl, double angle){
-		float [] dir = {-mySunlight[0], mySunlight[1], -mySunlight[2], 0};
-		gl.glPushMatrix();
-		// System.out.println(angle);
-		gl.glRotated(angle, 0, 1, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, dir, 0);
-		gl.glPopMatrix();
-	}
 
 	private void printArray(double[] arr) {
 		for (int i = 0; i < arr.length; i++) {
