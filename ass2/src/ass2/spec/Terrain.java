@@ -274,7 +274,8 @@ public class Terrain {
 	}
 	
 	public void setup(GL2 gl) {
-		String grassFile = "grass.bmp";
+
+		String grassFile = "textures/grass.bmp";
 		String grassExt = "bmp";
 		grassTexture = new Texture(gl,grassFile,grassExt,true);
 		
