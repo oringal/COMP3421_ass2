@@ -3,6 +3,9 @@ package ass2.spec;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 
+import ass2.spec.Camera;
+import ass2.spec.Texture;
+
 public class Avatar {
 	// used lecture code week 8 TexCylindar to draw cylinder
 
@@ -53,7 +56,7 @@ public class Avatar {
 		double zBack = -3;
 
 		//Draw the top of the cylinder with the canTop.bmp texture
-		//gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARBODY].getTextureId());
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARBODY].getTextureId());
 
 		gl.glBegin(GL2.GL_POLYGON);{
 

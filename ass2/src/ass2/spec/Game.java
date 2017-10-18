@@ -161,7 +161,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures[Game.GRASS] = new Texture(gl,grassFile,grassExt,true);
 		textures[Game.ROAD] = new Texture(gl,roadFile, roadExt, true);
 
-		String avatarFile = "textures/minionHead";
+		String avatarFile = "textures/minionHead.bmp";
 		String avatarExt = "bmp";
 		
 		textures[0] = new Texture(gl,grassFile,grassExt,true);
