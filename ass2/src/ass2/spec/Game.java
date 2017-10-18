@@ -144,23 +144,23 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	}
 	
 	private void loadTextures(GL2 gl) {
-		String grassFile = "textures/grass.bmp";
-		String grassExt = "bmp";
+		String grassFile = "textures/grass.png";
+		String grassExt = "png";
 		
-		String roadFile = "textures/road.bmp";
-		String roadExt = "bmp";
+		String roadFile = "textures/road.png";
+		String roadExt = "png";
 
-		String avatarHeadFile = "textures/minionHead.bmp";
-		String avatarHeadExt = "bmp";
+		String avatarHeadFile = "textures/minionHead.png";
+		String avatarHeadExt = "png";
 		
 		String avatarBodyFile = "textures/minionBody.png";
 		String avatarBodyExt = "png";
 		
-		String branchFile = "textures/branch.bmp";
-		String branchExt = "bmp";
+		String branchFile = "textures/branch.png";
+		String branchExt = "png";
 		
-		String leafFile = "textures/leaf.bmp";
-		String leafExt = "bmp";
+		String leafFile = "textures/leaf.png";
+		String leafExt = "png";
 				
 		textures[GRASS] = new Texture(gl,grassFile,grassExt,true);
 		textures[ROAD] = new Texture(gl,roadFile,roadExt,true);

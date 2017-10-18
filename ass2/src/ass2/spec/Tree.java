@@ -12,7 +12,7 @@ public class Tree {
 	private double[] myPos;
 	
 	private double angle;
-	private static String F = "FF>[>Fl<F<Fl][-Fl-F+Fl]<[<Fl>F>Fl][+Fl+F-Fl]";
+	private static String F = "FF>[>Fl<F<Fl][-Fl-F+Fl]<[<Fl>F>Fl][+Fl+Fl--Fl]";
 	private int depth;
 	private double branchSize;
 	private double branchDelta;
@@ -27,8 +27,8 @@ public class Tree {
 		
 		angle = 25;
 		depth = 2;
-		branchSize = 6;
-		branchDelta = 2;
+		branchSize = 10;
+		branchDelta = 3;
 		height = 0.1;
 	}
 	
@@ -58,6 +58,8 @@ public class Tree {
 	public void drawTree(GL2 gl, Texture[] tex) {
 		
 		String draw = rewrite(F, depth);
+		// Manually add length to the trunk
+		draw = "FFFFF" + draw;
 		if (Game.debug) System.out.println("the lsystem: " + draw);
 		
         // Draw   
@@ -86,12 +88,12 @@ public class Tree {
             // draw branch
             gl.glLineWidth((float)branchSize);
             gl.glBegin(GL2.GL_LINES);
-//            gl.glTexCoord2d(0, 0);
+            gl.glTexCoord2d(0, 0);
             gl.glVertex3f(0, 0, 0);
-//            gl.glTexCoord2d(0, 0.1);
+            gl.glTexCoord2d(0, 1);
             gl.glVertex3d(0, height, 0);
+    		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
             gl.glEnd();
-            
             gl.glTranslated(0, height, 0);
         } else if (c == 'l') { 
             double half = height / 2;
@@ -99,8 +101,6 @@ public class Tree {
             gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.LEAF].getTextureId()); 
             gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MIN_FILTER, GL2.GL_NEAREST);
             gl.glTexParameteri(GL2.GL_TEXTURE_2D, GL2.GL_TEXTURE_MAG_FILTER, GL2.GL_NEAREST);
-//            float[] matAmbandDif = {0.21f, 0.75f, 0.10f, 1f};
-//            gl.glMaterialfv(GL2.GL_BACK, GL2.GL_AMBIENT_AND_DIFFUSE, matAmbandDif, 0);
             
             // draw leaf
             gl.glPushMatrix();
@@ -110,20 +110,25 @@ public class Tree {
                 gl.glBegin(GL2.GL_TRIANGLE_FAN);
                 gl.glTexCoord2d(0.5, 0);
                 gl.glVertex3d(0, 0, 0);
+                
                 gl.glTexCoord2d(1, 0.3);
                 gl.glVertex3d(1, 0.9, 0.5);
+                
                 gl.glTexCoord2d(1, 0.63);
                 gl.glVertex3d(1, 1.9, 0.5);
+                
                 gl.glTexCoord2d(0.5, 1);
                 gl.glVertex3d(0, 3, 0);
+                
                 gl.glTexCoord2d(0, 0.63);
                 gl.glVertex3d(-1, 1.9, 0.5);
+                
                 gl.glTexCoord2d(0, 0.3);
                 gl.glVertex3d(-1, 0.9, 0.5);
                 gl.glEnd();
             }
             gl.glPopMatrix();
-            
+    		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
         } else if (c == '[') {
             gl.glPushMatrix();
             if (branchSize > 0) {
@@ -136,10 +141,6 @@ public class Tree {
             gl.glRotated(angle, 1, 0, 0);
         } else if (c == '-') {
             gl.glRotated(-angle, 1, 0, 0);
-        } else if (c == '^') {
-            gl.glRotated(angle, 0, 1, 0);
-        } else if (c == 'v') {
-            gl.glRotated(-angle, 0, 1, 0);
         } else if (c == '<') {
             gl.glRotated(angle, 0, 0, 1);
         } else if (c == '>') {
