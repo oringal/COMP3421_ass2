@@ -96,7 +96,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
 
-		myTerrain.setLighting(gl, 0);
+		myTerrain.setLight(gl, 0);
 		gl.glEnable(GL2.GL_LIGHT0);
 
 		// gl.glTranslated(0,0,0); 
@@ -114,7 +114,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		//camera.projectionSetup(gl);
 		
 		myTerrain.draw(gl,textures);
-		// gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+		gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
 		avatar.draw(gl); 
 		keyControls();
 	}
@@ -132,28 +132,11 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		/* Enable Lighting */
 		gl.glEnable(GL2.GL_DEPTH_TEST);
 		gl.glEnable(GL2.GL_LIGHTING);
-		gl.glEnable(GL2.GL_LIGHT0); 
 		gl.glEnable(GL2.GL_NORMALIZE);
-
-
-		float ambLight0[] = {0.3f,0.3f,0.3f,1.0f};
-		float difLight0[] = {1.0f,1.0f,1.0f,1.0f};
-		float specLight0[] = {1.0f,1.0f,1.0f,1.0f};
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambLight0, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, difLight0, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, specLight0, 0);
 
 		/* Cull Back Faces */
 		gl.glEnable(GL2.GL_CULL_FACE);
 		gl.glCullFace(GL2.GL_BACK);
-
-
-		float [] ad = {1.0f, 1.0f, 1.0f, 1.0f}; 
-		float [] sp = {0.2f, 0.2f, 0.2f, 1.0f}; 
-		float [] sh = {0f, 0f, 0f, 1.0f}; 
-		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, ad,0);
-		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, sp,0);
-		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, sh,0);
 
 		/* Turn on 2d Textures */
 		gl.glEnable(GL2.GL_TEXTURE_2D);
@@ -165,12 +148,11 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private void loadTextures(GL2 gl) {
 		String grassFile = "textures/grass.bmp";
 		String grassExt = "bmp";
-		
 		String roadFile = "textures/road.bmp";
 		String roadExt = "bmp";
-
 		
-		textures[0] = new Texture(gl,grassFile,grassExt,true);
+		textures[Game.GRASS] = new Texture(gl,grassFile,grassExt,true);
+		textures[Game.ROAD] = new Texture(gl,roadFile, roadExt, true);
 	}
 
 	@Override

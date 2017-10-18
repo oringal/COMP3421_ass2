@@ -24,6 +24,8 @@ public class Terrain {
 	private List<Tree> myTrees;
 	private List<Road> myRoads;
 	private float[] mySunlight;
+	private Light  myLight;
+
 
 	/**
 	 * Create a new terrain
@@ -37,6 +39,8 @@ public class Terrain {
 		myTrees = new ArrayList<Tree>();
 		myRoads = new ArrayList<Road>();
 		mySunlight = new float[3];
+		myLight = new Light();
+
 	}
 
 	public Terrain(Dimension size) {
@@ -189,14 +193,25 @@ public class Terrain {
 		Road road = new Road(width, spine);
 		myRoads.add(road);
 	}
-
-	public void draw(GL2 gl, Texture[] tex) {
-		drawTerrain(gl, tex);
-		// gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+	
+	public void setLight(GL2 gl, double angle) {
+		this.myLight.setLight(gl, mySunlight, angle);
 	}
 
-	public void drawTerrain(GL2 gl,Texture[] tex) {
+	public void draw(GL2 gl, Texture[] tex) {
+		
+		/* Material properties */
+		float [] ad = {1.0f, 1.0f, 1.0f, 1.0f}; 
+		float [] sp = {0.2f, 0.2f, 0.2f, 1.0f}; 
+		float [] sh = {0f, 0f, 0f, 1.0f}; 
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, ad,0);
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, sp,0);
+		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, sh,0);
+		
+		drawTerrain(gl, tex);
+	}
 
+	public void drawTerrain(GL2 gl, Texture[] tex) {
 
 		gl.glPushMatrix();
 		gl.glEnable(GL2.GL_TEXTURE_2D);
@@ -242,26 +257,28 @@ public class Terrain {
 				gl.glTexCoord2d(1, 0);
 				gl.glVertex3dv(p2, 0);
 
-				//    			System.out.println("#####");
-				//    			printArray(p1);
-				//    			printArray(p2);
-				//    			printArray(p3);
-				//    			printArray(p4);
-				//    			System.out.println("#####");
+//    			if (Game.debug) System.out.println("#####");
+//    			printArray(p1);
+//    			printArray(p2);
+//    			printArray(p3);
+//    			printArray(p4);
+//    			if (Game.debug) System.out.println("#####");
 			}
 		}
 		gl.glEnd();
 		gl.glPopMatrix();
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+
+	}
+	
+	public void drawRoad(GL2 gl, Texture[] tex) {
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.ROAD].getTextureId());
+		for (Road r : myRoads) {
+			
+		}
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 	}
 
-	public void setLighting(GL2 gl, double angle){
-		float [] dir = {-mySunlight[0], mySunlight[1], -mySunlight[2], 0};
-		gl.glPushMatrix();
-		// System.out.println(angle);
-		gl.glRotated(angle, 0, 1, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, dir, 0);
-		gl.glPopMatrix();
-	}
 
 	private void printArray(double[] arr) {
 		for (int i = 0; i < arr.length; i++) {

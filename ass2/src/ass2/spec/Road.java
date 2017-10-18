@@ -145,6 +145,8 @@ public class Road {
 		// this should never happen
 		throw new IllegalArgumentException("" + i);
 	}
+	
+	public void drawSelf(GL2 gl, ) {
 
 
 }
