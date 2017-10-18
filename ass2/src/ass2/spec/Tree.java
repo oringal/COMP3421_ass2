@@ -3,9 +3,8 @@ package ass2.spec;
 import com.jogamp.opengl.GL2;
 
 /**
- * COMMENT: Comment Tree 
- *
- * @author malcolmr
+ * 
+ * @author 
  */
 public class Tree {
 
@@ -90,7 +89,7 @@ public class Tree {
             gl.glBegin(GL2.GL_LINES);
             gl.glTexCoord2d(0, 0);
             gl.glVertex3f(0, 0, 0);
-            gl.glTexCoord2d(0, 1);
+            gl.glTexCoord2d(0, 0.15);
             gl.glVertex3d(0, height, 0);
     		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
             gl.glEnd();
@@ -112,19 +111,20 @@ public class Tree {
                 gl.glVertex3d(0, 0, 0);
                 
                 gl.glTexCoord2d(1, 0.3);
-                gl.glVertex3d(1, 0.9, 0.5);
+                gl.glVertex3d(1, 0.8, 0.5);
                 
                 gl.glTexCoord2d(1, 0.63);
                 gl.glVertex3d(1, 1.9, 0.5);
                 
                 gl.glTexCoord2d(0.5, 1);
-                gl.glVertex3d(0, 3, 0);
+                gl.glVertex3d(0, 3.2, 0);
                 
                 gl.glTexCoord2d(0, 0.63);
-                gl.glVertex3d(-1, 1.9, 0.5);
+                gl.glVertex3d(-1, 1.8, 0.5);
                 
                 gl.glTexCoord2d(0, 0.3);
                 gl.glVertex3d(-1, 0.9, 0.5);
+                
                 gl.glEnd();
             }
             gl.glPopMatrix();
