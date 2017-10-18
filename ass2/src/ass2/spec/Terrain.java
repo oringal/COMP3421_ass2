@@ -150,20 +150,28 @@ public class Terrain {
 		double forwardZ = Math.ceil(z);
 
 		if (x%1 != 0 && z%1 != 0) { // both not integers
+			if(Game.debug) System.out.println("in 1");
 			double left = altitude(leftX, z);
 			double right = altitude(rightX, z);
 			altitude = (x - leftX)/(rightX - leftX) * right + (rightX - x)/(rightX - leftX) * left;
 			
 		} else if (x%1 != 0) { // interpolate z axis
-			double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
-			double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
+			if(Game.debug) System.out.println("in 2");
+//			if(Game.debug) System.out.println(z + " ," + backZ + " ," + forwardZ);
+			double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)z) ;
+			double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
+			
+			if(Game.debug) System.out.println("part1: " + part1 + " part2: " + part2);
 			altitude = part1 + part2;
 
 		} else if (z%1 != 0) { // interpolate x axis
-			double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)z) ;
-			double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
+			if(Game.debug) System.out.println("in 3");
+			double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
+			double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
 			altitude = part1 + part2;
 		} else { // both are integers
+			if(Game.debug) System.out.println("in 4");
+
 			altitude = getGridAltitude((int) x, (int) z);
 		}
 
@@ -209,6 +217,10 @@ public class Terrain {
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, sh,0);
 		
 		drawTerrain(gl, tex);
+        gl.glDisable(GL2.GL_CULL_FACE);
+        drawRoads(gl,tex);
+        gl.glEnable(GL2.GL_CULL_FACE);
+
 	}
 
 	public void drawTerrain(GL2 gl, Texture[] tex) {
@@ -216,7 +228,6 @@ public class Terrain {
 		gl.glPushMatrix();
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.GRASS].getTextureId());
-		// gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
 
 		Dimension size = this.size();
 		double height = size.getHeight();
@@ -229,10 +240,10 @@ public class Terrain {
 		for (int z = 0; z < (height-1); z++) {
 
 			for (int x = 0; x < (width-1); x++) {
-				double[] p1 = {x, altitude(x,z), z};
-				double[] p2 = {x+1, altitude(x+1,z), z};
-				double[] p3 = {x, altitude(x,z+1), z+1};
-				double[] p4 = {x+1, altitude(x+1,z+1), z+1};
+				double[] p1 = {x, getGridAltitude(x,z), z};
+				double[] p2 = {x+1, getGridAltitude(x+1,z), z};
+				double[] p3 = {x, getGridAltitude(x,z+1), z+1};
+				double[] p4 = {x+1, getGridAltitude(x+1,z+1), z+1};
 
 				double[] norm1 = Util.normalise(Util.getNormal(p1, p2, p3));
 				double[] norm2 = Util.normalise(Util.getNormal(p2, p4 ,p3));
@@ -271,8 +282,7 @@ public class Terrain {
 
 	}
 	
-	public void drawRoad(GL2 gl, Texture[] tex) {
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.ROAD].getTextureId());
+	public void drawRoads(GL2 gl, Texture[] tex) {
 		
 		/* 
 		 * Find the highest point to place the road on 
@@ -282,16 +292,19 @@ public class Terrain {
 			double maxAlt = 0;
 			for (int i = 0; i < r.size(); i++) {
 				double[] p = r.point(i);
+				if (Game.debug) System.out.println("points: " + p[0]+ ", " + p[1]);
 				double curr = altitude(p[0], p[1]);
+		        if (Game.debug) System.out.println("curr: " + curr);
 				maxAlt = Math.max(curr,  maxAlt);
 			}
-			r.setAltitude(maxAlt + 0.001);
+//	        if (Game.debug) System.out.println("MaxALt: " + maxAlt);
+			r.setAltitude(maxAlt + 0.05);
 		}
 		/*
 		 * Draw Roads
 		 */
 		for (Road r: myRoads) {
-			
+			r.drawSelf(gl, tex);
 		}
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 	}

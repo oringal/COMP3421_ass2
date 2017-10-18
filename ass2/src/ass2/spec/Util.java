@@ -33,4 +33,10 @@ public class Util {
 		double norm[] = {n[0]/mag,n[1]/mag,n[2]/mag};
 		return norm;
 	}
+	
+	public static double[] scaleVector(double[] v, double s) {
+		v[0] *= s;
+		v[1] *= s;
+		return v;
+ 	}
 }
