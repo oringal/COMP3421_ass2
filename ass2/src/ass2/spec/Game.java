@@ -18,10 +18,13 @@ import com.jogamp.opengl.util.FPSAnimator;
  * @author malcolmr
  */
 public class Game extends JFrame implements GLEventListener, KeyListener{
+	
+	/* Debugger mode */
+	public final static boolean debug = true;
+
 
 	private Terrain myTerrain;
 	private Texture textures[];
-	private static Boolean debug = true;
 	
 	private Camera camera;
 	private Avatar avatar;
@@ -30,11 +33,17 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private static boolean rightKey;
 	private static boolean upKey;
 	private static boolean downKey;
+	
+	public final static int GRASS = 0;
+	public final static int ROAD = 0;
+
+	
+	
 
 	public Game(Terrain terrain) {
 		super("Assignment 2");
 		myTerrain = terrain;
-		textures = new Texture[2];
+		textures = new Texture[10];
 		camera = new Camera(myTerrain);
 		avatar = new Avatar(camera);
 		
@@ -78,10 +87,6 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		Terrain terrain = LevelIO.load(new File(args[0]));
 		Game game = new Game(terrain);
 		game.run();
-	}
-
-	public static Boolean debug() {
-		return debug;
 	}
 
 	@Override
@@ -150,14 +155,22 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, sp,0);
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, sh,0);
 
-// moved into Terrain class
 		/* Turn on 2d Textures */
-//		gl.glEnable(GL2.GL_TEXTURE_2D); 
-//		String grassFile = "grass.bmp";
-//		String grassExt = "bmp";
-//		textures[0] = new Texture(gl,grassFile,grassExt,true);
-		myTerrain.setup(gl);
+		gl.glEnable(GL2.GL_TEXTURE_2D);
+		loadTextures(gl);
+
 		avatar.setup(gl); // putting textures on avatar
+	}
+	
+	private void loadTextures(GL2 gl) {
+		String grassFile = "textures/grass.bmp";
+		String grassExt = "bmp";
+		
+		String roadFile = "textures/road.bmp"
+		String roadExt = "bmp";
+
+		
+		textures[0] = new Texture(gl,grassFile,grassExt,true);
 	}
 
 	@Override

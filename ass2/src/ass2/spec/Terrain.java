@@ -24,7 +24,6 @@ public class Terrain {
 	private List<Tree> myTrees;
 	private List<Road> myRoads;
 	private float[] mySunlight;
-	private Texture grassTexture;
 
 	/**
 	 * Create a new terrain
@@ -202,17 +201,18 @@ public class Terrain {
 		gl.glPushMatrix();
 		// gl.glColor4d(0, 1, 1, 1);
 		gl.glEnable(GL2.GL_TEXTURE_2D);
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, grassTexture.getTextureId());
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[0].getTextureId());
 		// gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
 
 		Dimension size = this.size();
 		double height = size.getHeight();
 		double width = size.getWidth();
 
-		gl.glBegin(GL2.GL_TRIANGLES);
+//		gl.glBegin(GL2.GL_TRIANGLES);
+		gl.glBegin(GL2.GL_TRIANGLE_STRIP);
+
 
 		for (int z = 0; z < (height-1); z++) {
-			// gl.glBegin(GL2.GL_TRIANGLE_STRIP);
 
 			for (int x = 0; x < (width-1); x++) {
 				// gl.glColor4d(x, getGridAltitude(x,z), z, 1);
@@ -268,15 +268,9 @@ public class Terrain {
 
 	private void printArray(double[] arr) {
 		for (int i = 0; i < arr.length; i++) {
-			System.out.print(arr[i] + ", ");
+			if (Game.debug) System.out.print(arr[i] + ", ");
 		}
-		System.out.println();
+		if (Game.debug) System.out.println();
 	}
 	
-	public void setup(GL2 gl) {
-		String grassFile = "grass.bmp";
-		String grassExt = "bmp";
-		grassTexture = new Texture(gl,grassFile,grassExt,true);
-		
-	}
 }
