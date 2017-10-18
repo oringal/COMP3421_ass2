@@ -199,24 +199,21 @@ public class Terrain {
 
 
 		gl.glPushMatrix();
-		// gl.glColor4d(0, 1, 1, 1);
 		gl.glEnable(GL2.GL_TEXTURE_2D);
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[0].getTextureId());
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.GRASS].getTextureId());
 		// gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
 
 		Dimension size = this.size();
 		double height = size.getHeight();
 		double width = size.getWidth();
 
-//		gl.glBegin(GL2.GL_TRIANGLES);
-		gl.glBegin(GL2.GL_TRIANGLE_STRIP);
+		gl.glBegin(GL2.GL_TRIANGLES);
+//		gl.glBegin(GL2.GL_TRIANGLE_STRIP);
 
 
 		for (int z = 0; z < (height-1); z++) {
 
 			for (int x = 0; x < (width-1); x++) {
-				// gl.glColor4d(x, getGridAltitude(x,z), z, 1);
-
 				double[] p1 = {x, altitude(x,z), z};
 				double[] p2 = {x+1, altitude(x+1,z), z};
 				double[] p3 = {x, altitude(x,z+1), z+1};
