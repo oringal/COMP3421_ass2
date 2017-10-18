@@ -10,6 +10,8 @@ import com.jogamp.opengl.GLAutoDrawable;
 
 
 
+
+
 /**
  * COMMENT: Comment HeightMap
  *
@@ -22,6 +24,7 @@ public class Terrain {
 	private List<Tree> myTrees;
 	private List<Road> myRoads;
 	private float[] mySunlight;
+	private Texture grassTexture;
 
 	/**
 	 * Create a new terrain
@@ -136,22 +139,19 @@ public class Terrain {
 		// | . / |   ^
 		// |  /. |   |
 		// -------   ----> x
-		// the point can be: left or right of the hypotenuse or on a side of the grid --> 4 cases
+		// the point can be: in either triangle, on z axis, on x axis, the intersection of the axis --> 4 cases
 
 		double leftX = Math.floor(x);
 		double rightX = Math.ceil(x);
-		double backZ = Math.floor(z); // neg. z direction (away from us. for the drawing above it is the up direction)
+		double backZ = Math.floor(z); // neg. z direction (away from us)
 		double forwardZ = Math.ceil(z);
-		//        double hypotenuse = (leftX + backZ) - z;
 
-		if (x%1 != 0 && z%1 != 0) {
+		if (x%1 != 0 && z%1 != 0) { // both not integers
 			double left = altitude(leftX, z);
 			double right = altitude(rightX, z);
 			altitude = (x - leftX)/(rightX - leftX) * right + (rightX - x)/(rightX - leftX) * left;
-		}
-		else if (x%1 != 0) { // interpolate z axis
-			// needed extra input for bilinear interpolation p1
-			// p1 = z when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
+			
+		} else if (x%1 != 0) { // interpolate z axis
 			double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
 			double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
 			altitude = part1 + part2;
@@ -160,243 +160,123 @@ public class Terrain {
 			double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)z) ;
 			double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
 			altitude = part1 + part2;
-        } 
-//        else if (x < hypotenuse) { // interpolate left triangle
-//            //altitude = bilinearInterpolation(x, leftX, rightX, z, forwardZ, backZ, hypotenuse);
-//        	
-//
-//        }
-        else { // interpolate right triangle -- get integer coords
-    		//altitude = bilinearInterpolation(x, rightX, leftX, z, backZ, forwardZ, hypotenuse);
-        	altitude = getGridAltitude((int) x, (int) z);
-        }
-        
+		} else { // both are integers
+			altitude = getGridAltitude((int) x, (int) z);
+		}
 
-        return altitude;
-    }
+		return altitude;
+	}
 
-    /**
-     * Interpolates the Z axis.
-     * @param z
-     * @param backZ - the negative direction of Z axis / pointing away from us
-     * @param forwardZ - the positive direction of Z axis / pointing towards from us
-     * @param x
-     * @param p1
-     * @return
-     */
-//    public double linearInterpolationZ(double z, double backZ, double forwardZ, double x, double p1) {
-//	// needed extra input for bilinear interpolation p1
-//	// p1 = x when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
-//	double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)p1, (int)forwardZ) ;
-//	double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
-//	
-//	return  (part1 + part2);
-//    }
+	/**
+	 * Add a tree at the specified (x,z) point.
+	 * The tree's y coordinate is calculated from the altitude of the terrain at that point.
+	 *
+	 * @param x
+	 * @param z
+	 */
+	public void addTree(double x, double z) {
+		double y = altitude(x, z);
+		Tree tree = new Tree(x, y, z);
+		myTrees.add(tree);
+	}
 
-    /**
-     * Interpolates the X axis.
-     * @param x
-     * @param leftX
-     * @param rightX
-     * @param z
-     * @param p1
-     * @return
-     */
-//    public double linearInterpolationX(double x, double leftX, double rightX, double z, double p1) {
-//    		// needed extra input for bilinear interpolation p1
-//    		// p1 = z when doing linear interpolation, p1 = leftX or rightX when doing bilinear interpolation
-//		double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)p1) ;
-//		double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
-//
-//		return  (part1 + part2);
-//    }
+	/**
+	 * Add a road.
+	 *
+	 * @param x
+	 * @param z
+	 */
+	public void addRoad(double width, double[] spine) {
+		Road road = new Road(width, spine);
+		myRoads.add(road);
+	}
 
-    /**
-     * Bilinear interpolation.
-     * @param x
-     * @param x1
-     * @param x2
-     * @param z
-     * @param z1
-     * @param z2
-     * @param hyp
-     * @return
-     */
-//    public double bilinearInterpolation(double x, double x1, double x2, double z, double z1, double z2, double hyp) {
-//		double part1 = ( (x - x1) / (hyp - x1) ) * linearInterpolationZ(z, z1, z2, x1, x2);
-//		double part2 = ( (hyp - x) / (hyp - x1) ) * linearInterpolationZ(z, z1, z2, x1, x1);
-//		
-//		return (part1 + part2);
-//    }
+	public void draw(GL2 gl, Texture[] tex) {
+		drawTerrain(gl, tex);
+		// gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+	}
 
-    /**
-     * Add a tree at the specified (x,z) point.
-     * The tree's y coordinate is calculated from the altitude of the terrain at that point.
-     *
-     * @param x
-     * @param z
-     */
-    public void addTree(double x, double z) {
-        double y = altitude(x, z);
-        Tree tree = new Tree(x, y, z);
-        myTrees.add(tree);
-    }
+	public void drawTerrain(GL2 gl,Texture[] tex) {
 
 
-    /**
-     * Add a road.
-     *
-     * @param x
-     * @param z
-     */
-    public void addRoad(double width, double[] spine) {
-        Road road = new Road(width, spine);
-        myRoads.add(road);
-    }
+		gl.glPushMatrix();
+		// gl.glColor4d(0, 1, 1, 1);
+		gl.glEnable(GL2.GL_TEXTURE_2D);
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, grassTexture.getTextureId());
+		// gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
 
- // ================= OUR CODE ================= //
+		Dimension size = this.size();
+		double height = size.getHeight();
+		double width = size.getWidth();
 
-    public void draw(GL2 gl, Texture[] tex) {
-    	drawTerrain(gl, tex);
-//    	gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
+		gl.glBegin(GL2.GL_TRIANGLES);
 
+		for (int z = 0; z < (height-1); z++) {
+			// gl.glBegin(GL2.GL_TRIANGLE_STRIP);
 
-    }
+			for (int x = 0; x < (width-1); x++) {
+				// gl.glColor4d(x, getGridAltitude(x,z), z, 1);
 
-    public void drawTerrain(GL2 gl,Texture[] tex) {
+				double[] p1 = {x, altitude(x,z), z};
+				double[] p2 = {x+1, altitude(x+1,z), z};
+				double[] p3 = {x, altitude(x,z+1), z+1};
+				double[] p4 = {x+1, altitude(x+1,z+1), z+1};
 
-    	
-    	gl.glPushMatrix();
-//    	gl.glColor4d(0, 1, 1, 1);
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[0].getTextureId());
+				double[] norm1 = Util.normalise(Util.getNormal(p1, p2, p3));
+				double[] norm2 = Util.normalise(Util.getNormal(p2, p4 ,p3));
 
+				gl.glNormal3dv(norm1,0);
+				gl.glTexCoord2d(0, 0);
+				gl.glVertex3dv(p1,0);
 
-//    	gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_LINE);
+				gl.glTexCoord2d(0, 1);
+				gl.glVertex3dv(p3,0);
 
-    	Dimension size = this.size();
-    	double height = size.getHeight();
-    	double width = size.getWidth();
+				gl.glTexCoord2d(1, 0);
+				gl.glVertex3dv(p2,0);
 
-    	gl.glBegin(GL2.GL_TRIANGLES);
+				gl.glNormal3dv(norm2,0);
+				gl.glTexCoord2d(0, 1);
+				gl.glVertex3dv(p3,0);
 
-    	for (int z = 0; z < (height-1); z++) {
-//			gl.glBegin(GL2.GL_TRIANGLE_STRIP);
+				gl.glTexCoord2d(1, 1);
+				gl.glVertex3dv(p4, 0);
 
-    		for (int x = 0; x < (width-1); x++) {
-//    	    	gl.glColor4d(x, getGridAltitude(x,z), z, 1);
+				gl.glTexCoord2d(1, 0);
+				gl.glVertex3dv(p2, 0);
 
-    			double[] p1 = {x, altitude(x,z), z};
-    			double[] p2 = {x+1, altitude(x+1,z), z};
-    			double[] p3 = {x, altitude(x,z+1), z+1};
-    			double[] p4 = {x+1, altitude(x+1,z+1), z+1};
-
-    			double[] norm1 = Util.normalise(Util.getNormal(p1, p2, p3));
-    			double[] norm2 = Util.normalise(Util.getNormal(p2, p4 ,p3));
-
-    			gl.glNormal3dv(norm1,0);
-    			gl.glTexCoord2d(0, 0);
-    			gl.glVertex3dv(p1,0);
-    			
-    			gl.glTexCoord2d(0, 1);
-    			gl.glVertex3dv(p3,0);
-    			
-    			gl.glTexCoord2d(1, 0);
-    			gl.glVertex3dv(p2,0);
-    			
-    			gl.glNormal3dv(norm2,0);
-    			gl.glTexCoord2d(0, 1);
-    			gl.glVertex3dv(p3,0);
-
-    			gl.glTexCoord2d(1, 1);
-    			gl.glVertex3dv(p4, 0);
-    			
-    			gl.glTexCoord2d(1, 0);
-    			gl.glVertex3dv(p2, 0);
-
-
-//    			System.out.println("#####");
-//    			printArray(p1);
-//    			printArray(p2);
-//    			printArray(p3);
-//    			printArray(p4);
-//    			System.out.println("#####");
-
-    		}
-
-    	}
+				//    			System.out.println("#####");
+				//    			printArray(p1);
+				//    			printArray(p2);
+				//    			printArray(p3);
+				//    			printArray(p4);
+				//    			System.out.println("#####");
+			}
+		}
 		gl.glEnd();
-    	gl.glPopMatrix();
-    }
+		gl.glPopMatrix();
+	}
 
-    
-    public void setLighting(GL2 gl, double angle){
-    	float [] dir = {-mySunlight[0], mySunlight[1], -mySunlight[2], 0};
-    	gl.glPushMatrix();
-//    		System.out.println(angle);
-    		gl.glRotated(angle, 0, 1, 0);
-    		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, dir, 0);
-    	gl.glPopMatrix();
-    }
+	public void setLighting(GL2 gl, double angle){
+		float [] dir = {-mySunlight[0], mySunlight[1], -mySunlight[2], 0};
+		gl.glPushMatrix();
+		// System.out.println(angle);
+		gl.glRotated(angle, 0, 1, 0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, dir, 0);
+		gl.glPopMatrix();
+	}
 
-    private void printArray(double[] arr) {
-	    	for (int i = 0; i < arr.length; i++) {
-	    		System.out.print(arr[i] + ", ");
-	    	}
-	    	System.out.println();
-    }
-
-// =================Gladys' Attempt does not work =( ================= //
-//    /**
-//     * Draws the terrain.
-//     * @param gl
-//     */
-//    public void draw(GL2 gl) {
-//
-//    		gl.glPushMatrix();
-//        gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-//
-//        	Dimension size = this.size();
-//        	double height = size.getHeight();
-//        	double width = size.getWidth();
-//
-//        	for (int z = 0; z < (height-1); ++z) {
-//        		for (int x = 0; x < (width-1); ++x) {
-//        			// Draw 2 triangles to make the mesh
-//        			double[] p1 = {x, getGridAltitude(x, z),  z};
-//        			double[] p2 = {x, getGridAltitude(x, z+1), z+1};
-//        			double[] p3 = {x+1, getGridAltitude(x+1, z), z};
-//
-//        			double[] norm1 = Util.getNormal(p1, p2, p3);
-//        			gl.glNormal3dv(norm1,0);
-//
-//        			gl.glBegin(GL2.GL_TRIANGLE_STRIP);
-//        			{
-//        				gl.glColor4d(0, 1, 1, 1);
-//	        			gl.glVertex3dv(p1,0);
-//	        			gl.glVertex3dv(p2,0);
-//	        			gl.glVertex3dv(p3,0);
-//        			}
-//        			gl.glEnd();
-//
-//        			double[] p4 = {x + 1, getGridAltitude(x+1, z), z};
-//        			double[] p5 = {x, getGridAltitude(x, z+1), z+1};
-//        			double[] p6 = {x+1, getGridAltitude(x+1, z+1), z+1};
-//
-//        			double[] norm2 = Util.getNormal(p4, p5, p6);
-//        			gl.glNormal3dv(norm2,0);
-//
-//        			gl.glBegin(GL2.GL_TRIANGLE_STRIP);
-//        			{
-//        				gl.glColor4d(0, 1, 1, 1);
-//	        			gl.glVertex3dv(p4,0);
-//	        			gl.glVertex3dv(p5,0);
-//	        			gl.glVertex3dv(p6,0);
-//        			}
-//        			gl.glEnd();
-//        		}
-//        	}
-//        	gl.glPolygonMode(GL2.GL_FRONT_AND_BACK, GL2.GL_FILL);
-//        	gl.glPopMatrix();
-//
-//    }
+	private void printArray(double[] arr) {
+		for (int i = 0; i < arr.length; i++) {
+			System.out.print(arr[i] + ", ");
+		}
+		System.out.println();
+	}
+	
+	public void setup(GL2 gl) {
+		String grassFile = "grass.bmp";
+		String grassExt = "bmp";
+		grassTexture = new Texture(gl,grassFile,grassExt,true);
+		
+	}
 }
