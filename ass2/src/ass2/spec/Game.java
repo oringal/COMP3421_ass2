@@ -20,7 +20,7 @@ import com.jogamp.opengl.util.FPSAnimator;
 public class Game extends JFrame implements GLEventListener, KeyListener{
 	
 	/* Debugger mode */
-	public final static boolean debug = false;
+	public final static boolean debug = true;
 
 
 	private Terrain myTerrain;
@@ -39,6 +39,10 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int ROAD = 1;
 	public final static int AVATARBODY = 2;
 	public final static int AVATARHEAD = 3;
+	public final static int BRANCH = 4;
+	public final static int LEAF = 5;
+
+
 
 
 
@@ -151,11 +155,20 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		
 		String avatarBodyFile = "textures/minionBody.png";
 		String avatarBodyExt = "png";
+		
+		String branchFile = "textures/branch.bmp";
+		String branchExt = "bmp";
+		
+		String leafFile = "textures/leaf.bmp";
+		String leafExt = "bmp";
 				
 		textures[GRASS] = new Texture(gl,grassFile,grassExt,true);
 		textures[ROAD] = new Texture(gl,roadFile,roadExt,true);
 		textures[AVATARHEAD] = new Texture(gl, avatarHeadFile, avatarHeadExt, true);
 		textures[AVATARBODY] = new Texture(gl, avatarBodyFile, avatarBodyExt, true);
+		textures[BRANCH] = new Texture(gl, branchFile, branchExt, true);
+		textures[LEAF] = new Texture(gl, leafFile, leafExt, true);
+
 
 	}
 

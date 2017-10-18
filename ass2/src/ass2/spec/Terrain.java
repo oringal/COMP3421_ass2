@@ -220,6 +220,7 @@ public class Terrain {
         gl.glDisable(GL2.GL_CULL_FACE);
         drawRoads(gl,tex);
         gl.glEnable(GL2.GL_CULL_FACE);
+        drawTrees(gl,tex);
 
 	}
 
@@ -307,6 +308,12 @@ public class Terrain {
 			r.drawSelf(gl, tex);
 		}
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+	}
+	
+	public void drawTrees(GL2 gl, Texture[] tex) {
+		for (Tree t : myTrees) {
+			t.drawTree(gl, tex);
+		}
 	}
 
 
