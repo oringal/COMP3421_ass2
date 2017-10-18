@@ -312,11 +312,8 @@ public class Terrain {
 	
 	public void drawTrees(GL2 gl, Texture[] tex) {
 		for (Tree t : myTrees) {
-//			double[] p = t.getPosition();
-//			double alt = altitude(p[0],p[1]);
 			t.drawTree(gl, tex);
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
-
 		}
 	}
 

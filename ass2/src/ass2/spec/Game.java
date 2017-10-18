@@ -28,6 +28,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	
 	private Camera camera;
 	private Avatar avatar;
+	private int shaderProgram;
 	
 	private static boolean leftKey;
 	private static boolean rightKey;

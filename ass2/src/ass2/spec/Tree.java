@@ -36,6 +36,11 @@ public class Tree {
 		return myPos;
 	}
 	
+	/*
+	 * 
+	 * Create an L tree system given a recursion depth
+	 * Calculates iteratively for increased performance
+	 */
 	public String rewrite(String s, int depth) {
 		
 		String old = s;
