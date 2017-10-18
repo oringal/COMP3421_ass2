@@ -22,8 +22,8 @@ public class Avatar {
 	}
 
 	public void setup(GL2 gl) {
-		//myTextures[0] = new Texture(gl, "minionHead.bmp", "bmp", true);
-		//myTextures[1] = new Texture(gl, "minionBody.bmp", "bmp", true);
+		//myTextures[0] = new Texture(gl, "textures/minionHead.bmp", "bmp", true);
+		//myTextures[1] = new Texture(gl, "textures/minionBody.bmp", "bmp", true);
 	}
 
 	public void draw(GL2 gl) {
@@ -38,6 +38,7 @@ public class Avatar {
 		double zBack = -3;
 
 		//gl.glEnable(GL2.GL_TEXTURE_2D);
+		//myTextures[0] = new Texture(gl, "textures/minionHead.bmp", "bmp", true);
 		//gl.glBindTexture(GL2.GL_TEXTURE_2D, myTextures[0].getTextureId());
 		gl.glBegin(GL2.GL_POLYGON);{
 
@@ -51,6 +52,7 @@ public class Avatar {
 			}
 		}gl.glEnd();
 
+		//myTextures[1] = new Texture(gl, "textures/minionBody.bmp", "bmp", true);
 		//gl.glBindTexture(GL2.GL_TEXTURE_2D, myTextures[1].getTextureId());
 		gl.glBegin(GL2.GL_QUAD_STRIP);{      
 			for(int i=0; i<= SLICES; i++){
