@@ -56,8 +56,8 @@ public class Avatar {
 		double zBack = -3;
 
 		//Draw the top of the cylinder with the canTop.bmp texture
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARBODY].getTextureId());
 
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARHEAD].getTextureId());
 		gl.glBegin(GL2.GL_POLYGON);{
 
 			for(int i = 0; i < SLICES; i++)
@@ -70,7 +70,7 @@ public class Avatar {
 			}
 		}gl.glEnd();
 
-		//gl.glBindTexture(GL2.GL_TEXTURE_2D, myTextures[1].getTextureId());
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARBODY].getTextureId());
 		gl.glBegin(GL2.GL_QUAD_STRIP);{      
 			for(int i=0; i<= SLICES; i++){
 				double angle0 = i*angleIncrement;
