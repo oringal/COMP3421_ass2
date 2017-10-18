@@ -190,9 +190,7 @@ public class Road {
                 
                 gl.glTexCoord2d(0, 1);
                 gl.glVertex3d(currP[0] + normal[0], altitude, currP[1] + normal[2]);
-        	}
-        	
-        	else {
+        	} else {
                 gl.glTexCoord2d(0.1, 0);
                 gl.glVertex3d(currP[0] - normal[0], altitude, currP[1] - normal[2]);
                 gl.glTexCoord2d(0.1, 1);

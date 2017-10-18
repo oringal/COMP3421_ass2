@@ -20,7 +20,7 @@ import com.jogamp.opengl.util.FPSAnimator;
 public class Game extends JFrame implements GLEventListener, KeyListener{
 	
 	/* Debugger mode */
-	public final static boolean debug = true;
+	public final static boolean debug = false;
 
 
 	private Terrain myTerrain;
@@ -40,8 +40,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int AVATARBODY = 2;
 	public final static int AVATARHEAD = 3;
 
-	
-	
+
 
 	public Game(Terrain terrain) {
 		super("Assignment 2");
@@ -104,20 +103,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glLoadIdentity();
 
 		myTerrain.setLight(gl, 0);
-		gl.glEnable(GL2.GL_LIGHT0);
-
-		// gl.glTranslated(0,0,0); 
-		// gl.glRotated ( 60, 0, 1, 0);  //Axis  (1,1,1)
-		
-//		GLU glu = new GLU();
-//		glu.gluLookAt(
-//				-5, 0, -3, 
-//				0, 0, 1, 
-//				0, 1, 0
-//				);
-
-		avatar.draw(gl, textures);
-		
+		avatar.draw(gl, textures);		
 		// setup the projection matrix with the aspect ratio
 		//camera.projectionSetup(gl);
 		myTerrain.draw(gl,textures);
