@@ -109,7 +109,20 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glLoadIdentity();
 
 		myTerrain.setLight(gl, 0);
-		avatar.draw(gl, textures);		
+		gl.glEnable(GL2.GL_LIGHT0);
+
+		// gl.glTranslated(0,0,0); 
+		// gl.glRotated ( 60, 0, 1, 0);  //Axis  (1,1,1)
+		
+//		GLU glu = new GLU();
+//		glu.gluLookAt(
+//				-5, 4, -3,
+//				0, 0, 1, 
+//				0, 1, 0
+//				);
+
+		avatar.draw(gl, textures);
+		
 		// setup the projection matrix with the aspect ratio
 		//camera.projectionSetup(gl);
 		myTerrain.draw(gl,textures);
