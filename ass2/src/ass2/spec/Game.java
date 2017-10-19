@@ -71,7 +71,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public void run() {
 		GLProfile glp = GLProfile.getDefault();
 		GLCapabilities caps = new GLCapabilities(glp);
-		GLJPanel panel = new GLJPanel(caps); // put caps as an input to GLJPanel
+		GLJPanel panel = new GLJPanel(caps); 
 		panel.addGLEventListener(this);
 
 		// Add an animator to call 'display' at 60fps        
@@ -104,10 +104,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 		gl.glUseProgram(shaderProgram);
-		
-		// setup the projection matrix with the aspect ratio
-		//camera.projectionSetup(gl);
-		
+				
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
@@ -115,21 +112,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		myTerrain.setLight(gl, 0);
 		gl.glEnable(GL2.GL_LIGHT0);
 
-		// gl.glTranslated(0,0,0); 
-		// gl.glRotated ( 60, 0, 1, 0);  //Axis  (1,1,1)
-		
-//		GLU glu = new GLU();
-//		glu.gluLookAt(
-//				-5, 4, -3,
-//				0, 0, 1, 
-//				0, 1, 0
-//				);
-
-		//double alt = myTerrain.altitude(camera.getPosition()[0], camera.getPosition()[2]);
 		avatar.draw(gl, textures);
 		
-		// setup the projection matrix with the aspect ratio
-		//camera.projectionSetup(gl);
 		myTerrain.draw(gl,textures);
 		gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
 
@@ -221,13 +205,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glLoadIdentity();
 		glu.gluPerspective(60, width/height, 1, 20);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
-		
-		camera.setAspectRatio((float) width / (float) height);
-
 	}
-	
-	//========OWN CODE========//
-	
+		
 	private void keyControls() {
 		
 		if (leftKey) {
