@@ -1,5 +1,7 @@
 package ass2.spec;
 
+import java.util.ArrayList;
+
 import com.jogamp.opengl.GL2;
 
 /**
@@ -12,6 +14,7 @@ public class Tree {
 	
 	private double angle;
 	private static String F = "FF>[>Fl<F<Fl][-Fl-F+Fl]<[<Fl>F>Fl][+Fl+Fl--Fl]";
+	private static ArrayList<String> lsystem;
 	private int depth;
 	private double branchSize;
 	private double branchDelta;
@@ -25,10 +28,12 @@ public class Tree {
 		myPos[2] = z;
 		
 		angle = 25;
-		depth = 2;
+		depth = 1;
 		branchSize = 10;
 		branchDelta = 3;
 		height = 0.1;
+		lsystem = new ArrayList<String>();
+		lsystem.add(F);
 	}
 	
 
@@ -36,24 +41,36 @@ public class Tree {
 		return myPos;
 	}
 	
+	public double getDepth() {
+		return depth;
+	}
+	
+	public void setDepth(int d) {
+		if (depth < 0) depth = 0;
+		else depth = d;
+	}
+	
 	/*
-	 * 
 	 * Create an L tree system given a recursion depth
-	 * Calculates iteratively for increased performance
+	 * Calculates iteratively and stores each depth in the 
+	 * lsystem array for increased performance
 	 */
-	public String rewrite(String s, int depth) {
+	public String rewrite(int depth) {
 		
-		String old = s;
-		for (int d = 0; d < depth; d++) {
+		int size = lsystem.size() - 1;
+		String old = lsystem.get(size);
+
+		for (; size < depth; size++) {
 			String newsystem = "";
-			for (int i=0; i<s.length(); i++) {
-				if (s.charAt(i) == 'F') {
+			for (int i=0; i<old.length(); i++) {
+				if (old.charAt(i) == 'F') {
 					newsystem += F;
 				} else {
 					newsystem += old.charAt(i);
 				}
 			}
 			old = newsystem;
+			lsystem.add(old);
 		}
 		
 		return old;
@@ -61,10 +78,17 @@ public class Tree {
 	
 	public void drawTree(GL2 gl, Texture[] tex) {
 		
-		String draw = rewrite(F, depth);
+		String draw = "";
+		if (depth <= 0) {
+			draw = lsystem.get(0);
+		} else if (lsystem.size() <= depth) {
+			draw = rewrite(depth);
+		} else {
+			draw = lsystem.get(depth);
+		}
 		// Manually add length to the trunk
 		draw = "FFFFF" + draw;
-		if (Game.debug) System.out.println("the lsystem: " + draw);
+//		if (Game.debug) System.out.println("the lsystem: " + draw);
 		
         // Draw   
         gl.glDisable(GL2.GL_CULL_FACE);

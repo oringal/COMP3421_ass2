@@ -159,8 +159,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		loadTextures(gl);
 		
-		String vs = "/home/antheny/graphicsass2/ass2/src/ass2/spec/PhongVertex.glsl";
-		String fs = "/home/antheny/graphicsass2/ass2/src/ass2/spec/PhongFragment.glsl";
+		String vs = "src/ass2/spec/PhongVertex.glsl";
+		String fs = "src/ass2/spec/PhongFragment.glsl";
 		try {
 			shaderProgram = Shader.initShaders(gl, vs, fs);
 		} catch (Exception e) {
