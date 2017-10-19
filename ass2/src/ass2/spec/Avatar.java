@@ -108,7 +108,7 @@ public class Avatar {
 	
 	public void moveForward() {
 		//moveX = (moveX + WALKING_SPEED);
-		angleZ = angleZ + ROTATE_SPEED;
+//		angleZ = angleZ + ROTATE_SPEED;
 		camera.moveForward();
 	}
 
