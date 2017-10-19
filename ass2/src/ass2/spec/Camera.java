@@ -119,9 +119,9 @@ public class Camera {
 		return angle;
 	}
 	
-//	public void toggleFirstPerson() {
-//		firstPerson = !firstPerson;
-//	}
+	public void toggleFirstPerson() {
+		firstPerson = !firstPerson;
+	}
 	
 	public void setAspectRatio(float aspectRatio) {
 		this.aspectRatio = aspectRatio;

@@ -11,6 +11,8 @@ import com.jogamp.opengl.glu.GLU;
 import javax.swing.JFrame;
 import com.jogamp.opengl.util.FPSAnimator;
 
+import java.nio.file.Paths;
+
 
 /**
  * COMMENT: Comment Game 
@@ -20,7 +22,7 @@ import com.jogamp.opengl.util.FPSAnimator;
 public class Game extends JFrame implements GLEventListener, KeyListener{
 	
 	/* Debugger mode */
-	public final static boolean debug = true;
+	public final static boolean debug = false;
 
 
 	private Terrain myTerrain;
@@ -123,8 +125,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 //				0, 1, 0
 //				);
 
-		double alt = myTerrain.altitude(camera.getPosition()[0], camera.getPosition()[2]);
-		avatar.draw(gl, textures, alt);
+		//double alt = myTerrain.altitude(camera.getPosition()[0], camera.getPosition()[2]);
+		avatar.draw(gl, textures);
 		
 		// setup the projection matrix with the aspect ratio
 		//camera.projectionSetup(gl);
@@ -159,14 +161,16 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		loadTextures(gl);
 		
-		String vs = "/home/antheny/graphicsass2/ass2/src/ass2/spec/PhongVertex.glsl";
-		String fs = "/home/antheny/graphicsass2/ass2/src/ass2/spec/PhongFragment.glsl";
-		try {
-			shaderProgram = Shader.initShaders(gl, vs, fs);
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
+
+//		String path = Paths.get(".").toAbsolutePath().normalize().toString();
+//		String vs = path + "/ass2/src/ass2/spec/PhongVertex.glsl";
+//		String fs = path + "/ass2/src/ass2/spec/PhongFragment.glsl";
+//		try {
+//			shaderProgram = Shader.initShaders(gl, vs, fs);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			System.exit(1);
+//		}
 
 	}
 	
@@ -271,6 +275,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		}
 		if (e.getKeyCode() == KeyEvent.VK_F) {
 			firstPerson = true;
+		}
+		if (e.getKeyCode() == KeyEvent.VK_F) {
+			camera.toggleFirstPerson();
 		}
 
 	}

@@ -23,7 +23,7 @@ public class Avatar {
 		
 	}
 
-	public void draw(GL2 gl, Texture[] tex, double altitude) {
+	public void draw(GL2 gl, Texture[] tex) {
 		//GLU glu = new GLU();
 		//gl.glDisable(GL2.GL_CULL_FACE);
 		camera.render(gl);
@@ -35,7 +35,7 @@ public class Avatar {
 		
 		double[] cameraPosition = camera.getPosition();
 		// moves back and forth with camera
-		gl.glTranslated(cameraPosition[0], cameraPosition[1] + altitude , cameraPosition[2]);
+		gl.glTranslated(cameraPosition[0], cameraPosition[1] + 2f, cameraPosition[2]);
 		// turns with camera
 		gl.glRotated(camera.getAngle(), 0, 1, 0);
 		
