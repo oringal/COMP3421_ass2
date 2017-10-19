@@ -28,6 +28,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	
 	private Camera camera;
 	private Avatar avatar;
+	private int shaderProgram;
 	
 	private static boolean leftKey;
 	private static boolean rightKey;
@@ -39,9 +40,12 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int ROAD = 1;
 	public final static int AVATARBODY = 2;
 	public final static int AVATARHEAD = 3;
+	public final static int BRANCH = 4;
+	public final static int LEAF = 5;
 
-	
-	
+
+
+
 
 	public Game(Terrain terrain) {
 		super("Assignment 2");
@@ -154,22 +158,31 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	}
 	
 	private void loadTextures(GL2 gl) {
-		String grassFile = "textures/grass.bmp";
-		String grassExt = "bmp";
+		String grassFile = "textures/grass.png";
+		String grassExt = "png";
 		
-		String roadFile = "textures/road.bmp";
-		String roadExt = "bmp";
+		String roadFile = "textures/road.png";
+		String roadExt = "png";
 
-		String avatarHeadFile = "textures/minionHead.bmp";
-		String avatarHeadExt = "bmp";
+		String avatarHeadFile = "textures/minionHead.png";
+		String avatarHeadExt = "png";
 		
 		String avatarBodyFile = "textures/minionBody.png";
 		String avatarBodyExt = "png";
+		
+		String branchFile = "textures/branch.png";
+		String branchExt = "png";
+		
+		String leafFile = "textures/leaf.png";
+		String leafExt = "png";
 				
 		textures[GRASS] = new Texture(gl,grassFile,grassExt,true);
 		textures[ROAD] = new Texture(gl,roadFile,roadExt,true);
 		textures[AVATARHEAD] = new Texture(gl, avatarHeadFile, avatarHeadExt, true);
 		textures[AVATARBODY] = new Texture(gl, avatarBodyFile, avatarBodyExt, true);
+		textures[BRANCH] = new Texture(gl, branchFile, branchExt, true);
+		textures[LEAF] = new Texture(gl, leafFile, leafExt, true);
+
 
 	}
 
