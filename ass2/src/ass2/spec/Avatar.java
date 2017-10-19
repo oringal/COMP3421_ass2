@@ -98,7 +98,7 @@ public class Avatar {
 			}
 			
 		}gl.glEnd();    
-		
+
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARFEET].getTextureId());
 		gl.glBegin(GL2.GL_POLYGON);{
 
