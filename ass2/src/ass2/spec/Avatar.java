@@ -89,6 +89,7 @@ public class Avatar {
 
 			}
 		}gl.glEnd();    
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 
 		//Draw the bottom of the cylinder also with the canTop.bmp texture :)
 		//just for demonstration.
@@ -107,8 +108,8 @@ public class Avatar {
 	}
 	
 	public void moveForward() {
-		//moveX = (moveX + WALKING_SPEED);
-		angleZ = angleZ + ROTATE_SPEED;
+//		moveX = (moveX + WALKING_SPEED);
+//		angleZ = angleZ + ROTATE_SPEED;
 		camera.moveForward();
 	}
 
