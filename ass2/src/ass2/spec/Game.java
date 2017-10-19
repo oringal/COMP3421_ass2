@@ -40,8 +40,10 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int ROAD = 1;
 	public final static int AVATARBODY = 2;
 	public final static int AVATARHEAD = 3;
-	public final static int BRANCH = 4;
-	public final static int LEAF = 5;
+	public final static int AVATARFEET = 4;
+	public final static int BRANCH = 5;
+	public final static int LEAF = 6;
+	
 
 
 
@@ -101,7 +103,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		GL2 gl = drawable.getGL().getGL2();
 		
 		// setup the projection matrix with the aspect ratio
-		camera.projectionSetup(gl);
+		//camera.projectionSetup(gl);
 		
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
@@ -120,7 +122,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 //				0, 1, 0
 //				);
 
-		avatar.draw(gl, textures);
+		double alt = myTerrain.altitude(camera.getPosition()[0], camera.getPosition()[2]);
+		avatar.draw(gl, textures, alt);
 		
 		// setup the projection matrix with the aspect ratio
 		//camera.projectionSetup(gl);
@@ -170,6 +173,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		String avatarBodyFile = "textures/minionBody.png";
 		String avatarBodyExt = "png";
 		
+		String avatarFeetFile = "textures/minionFeet.png";
+		String avatarFeetExt = "png";
+		
 		String branchFile = "textures/branch.png";
 		String branchExt = "png";
 		
@@ -180,6 +186,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures[ROAD] = new Texture(gl,roadFile,roadExt,true);
 		textures[AVATARHEAD] = new Texture(gl, avatarHeadFile, avatarHeadExt, true);
 		textures[AVATARBODY] = new Texture(gl, avatarBodyFile, avatarBodyExt, true);
+		textures[AVATARFEET] = new Texture(gl, avatarFeetFile, avatarFeetExt, true);
 		textures[BRANCH] = new Texture(gl, branchFile, branchExt, true);
 		textures[LEAF] = new Texture(gl, leafFile, leafExt, true);
 
