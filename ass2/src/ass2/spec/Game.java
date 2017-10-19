@@ -99,6 +99,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
+		gl.glUseProgram(shaderProgram);
 		
 		// setup the projection matrix with the aspect ratio
 		camera.projectionSetup(gl);
@@ -141,6 +142,15 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		/* Turn on 2d Textures */
 		gl.glEnable(GL2.GL_TEXTURE_2D);
 		loadTextures(gl);
+		
+		String vs = "/home/antheny/graphicsass2/ass2/src/ass2/spec/PhongVertex.glsl";
+		String fs = "/home/antheny/graphicsass2/ass2/src/ass2/spec/PhongFragment.glsl";
+		try {
+			shaderProgram = Shader.initShaders(gl, vs, fs);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 
 	}
 	
