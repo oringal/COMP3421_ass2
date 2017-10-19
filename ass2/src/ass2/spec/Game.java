@@ -111,7 +111,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		
 //		GLU glu = new GLU();
 //		glu.gluLookAt(
-//				-5, 0, -3, 
+//				-5, 4, -3,
 //				0, 0, 1, 
 //				0, 1, 0
 //				);

@@ -41,9 +41,9 @@ public class Avatar {
 //			return;
 //		}
 		
-		double[] cameraPosition = camera.getPosition();
-		gl.glTranslated(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
-		gl.glRotated(camera.getAngle(), 0, 1, 0);
+//		double[] cameraPosition = camera.getPosition();
+//		gl.glTranslated(cameraPosition[0], cameraPosition[1], cameraPosition[2]);
+//		gl.glRotated(camera.getAngle(), 0, 1, 0);
 		
 		// Commands to turn the cylinder.
 		gl.glRotated(angleZ, 0.0, 0.0, 1.0);
