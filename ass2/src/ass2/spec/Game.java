@@ -148,8 +148,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		loadTextures(gl);
 
 		String path = Paths.get(".").toAbsolutePath().normalize().toString();
-		String vs = path + "/src/ass2/spec/PhongVertex.glsl";
-		String fs = path + "/src/ass2/spec/PhongFragment.glsl";
+		String vs = path + "/ass2/src/ass2/spec/PhongVertex.glsl";
+		String fs = path + "/ass2/src/ass2/spec/PhongFragment.glsl";
 		try {
 			shaderProgram = Shader.initShaders(gl, vs, fs);
 		} catch (Exception e) {
