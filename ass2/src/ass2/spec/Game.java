@@ -115,16 +115,6 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		myTerrain.setLight(gl, 0);
 		gl.glEnable(GL2.GL_LIGHT0);
 
-		// gl.glTranslated(0,0,0); 
-		// gl.glRotated ( 60, 0, 1, 0);  //Axis  (1,1,1)
-		
-//		GLU glu = new GLU();
-//		glu.gluLookAt(
-//				-5, 4, -3,
-//				0, 0, 1, 
-//				0, 1, 0
-//				);
-
 		//double alt = myTerrain.altitude(camera.getPosition()[0], camera.getPosition()[2]);
 		avatar.draw(gl, textures);
 		
@@ -162,8 +152,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		loadTextures(gl);
 
 		String path = Paths.get(".").toAbsolutePath().normalize().toString();
-		String vs = path + "/ass2/src/ass2/spec/PhongVertex.glsl";
-		String fs = path + "/ass2/src/ass2/spec/PhongFragment.glsl";
+		String vs = path + "/src/ass2/spec/PhongVertex.glsl";
+		String fs = path + "/src/ass2/spec/PhongFragment.glsl";
 		try {
 			shaderProgram = Shader.initShaders(gl, vs, fs);
 		} catch (Exception e) {
@@ -252,10 +242,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
+	public void keyTyped(KeyEvent e) {}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
@@ -277,6 +264,10 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		}
 		if (e.getKeyCode() == KeyEvent.VK_F) {
 			camera.toggleFirstPerson();
+		}
+		if(e.getKeyCode() == KeyEvent.VK_T) {
+			if (e.isShiftDown()) myTerrain.decTreeDepth();
+			else myTerrain.incTreeDepth();
 		}
 
 	}

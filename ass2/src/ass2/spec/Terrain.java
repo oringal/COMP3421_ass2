@@ -203,7 +203,7 @@ public class Terrain {
 	}
 	
 	public void setLight(GL2 gl, double angle) {
-		this.myLight.setLight(gl, mySunlight, angle);
+		this.myLight.setLight(gl);
 	}
 
 	public void draw(GL2 gl, Texture[] tex) {
@@ -316,6 +316,15 @@ public class Terrain {
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 		}
 	}
+	
+    public void incTreeDepth() {
+        for (Tree t : myTrees)
+            t.incDepth();
+    }
+    public void decTreeDepth() {
+        for (Tree t : myTrees)
+            t.decDepth();
+    }
 
 
 	private void printArray(double[] arr) {

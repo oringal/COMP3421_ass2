@@ -50,6 +50,13 @@ public class Tree {
 		else depth = d;
 	}
 	
+	public void incDepth() {
+		depth++;
+	}
+	
+	public void decDepth() {
+		if (depth > 0) depth--;
+	}
 	/*
 	 * Create an L tree system given a recursion depth
 	 * Calculates iteratively and stores each depth in the 

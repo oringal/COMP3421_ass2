@@ -3,6 +3,7 @@
 varying vec2 texCoordV;
 
 uniform sampler2D texUnit1;
+uniform float intensity;
 //uniform sampler2D texUnit2;
 
 varying vec3 N;

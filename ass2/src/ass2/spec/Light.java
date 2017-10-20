@@ -4,7 +4,7 @@ import com.jogamp.opengl.GL2;
 
 public class Light {
 	
-	public void setLight(GL2 gl, float[] sunlight, double angle) {
+	public void setLight(GL2 gl) {
 		
 		float ambLight0[] = {0.3f,0.3f,0.3f,1.0f};
 		float difLight0[] = {1.0f,1.0f,1.0f,1.0f};
