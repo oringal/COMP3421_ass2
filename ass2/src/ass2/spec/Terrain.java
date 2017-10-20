@@ -223,14 +223,15 @@ public class Terrain {
 	}
 	
 	public void terrainInit() {
-		mySun = new Sun(mySunlight, 1, shaderprogram);
+		mySun = new Sun(mySunlight, 1, shaderprogram, size().getWidth(), size().getHeight());
 	}
 
 	public void draw(GL2 gl, Texture[] tex) {
 		
 		setLight(gl);
-		
-		/* Material properties */
+        drawSun(gl,tex);
+
+        /* Material properties */
 		float [] ad = {1.0f, 1.0f, 1.0f, 1.0f}; 
 		float [] sp = {0.2f, 0.2f, 0.2f, 1.0f}; 
 		float [] sh = {0f, 0f, 0f, 1.0f}; 
@@ -243,7 +244,7 @@ public class Terrain {
         drawRoads(gl,tex);
         gl.glEnable(GL2.GL_CULL_FACE);
         drawTrees(gl,tex);
-        drawSun(gl,tex);
+
 
 	}
 

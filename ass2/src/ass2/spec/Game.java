@@ -38,19 +38,6 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private static boolean downKey;
 	private static boolean firstPerson;
 	
-	private final static String[] texFileName = {	"textures/grass.png",		//0
-													"textures/road.png",  		//1
-													"textures/minionBody.png", 	//2
-													"textures/minionHead.png", 	//3
-													"textures/minionFeet.png", 	//4
-													"textures/branch.png",  	//5
-													"textures/leaf.png", 		//6
-													"textures/sun.png"			//7
-												};
-	
-	private final static String texFileExt = "png";
-
-	
 	public final static int GRASS = 0;
 	public final static int ROAD = 1;
 	public final static int AVATARBODY = 2;
@@ -178,6 +165,20 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	}
 	
 	private void loadTextures(GL2 gl) {
+		
+		String[] texFileName = {	"textures/grass.png",		//0
+									"textures/road.png",  		//1
+									"textures/minionBody.png", 	//2
+									"textures/minionHead.png", 	//3
+									"textures/minionFeet.png", 	//4
+									"textures/branch.png",  	//5
+									"textures/leaf.png", 		//6
+									"textures/sun.png"			//7
+								};
+
+		String texFileExt = "png";
+		
+		
 		textures[GRASS] = new Texture(gl,texFileName[GRASS],texFileExt,true);
 		textures[ROAD] = new Texture(gl,texFileName[ROAD],texFileExt,true);
 		textures[AVATARHEAD] = new Texture(gl, texFileName[AVATARHEAD], texFileExt, true);

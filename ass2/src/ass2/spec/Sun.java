@@ -7,7 +7,7 @@ import com.jogamp.opengl.glu.GLUquadric;
 public class Sun {
 	private static final double SIZE = 1;
 	private static final int SLICES = 32;
-
+	private static final double lightSlices = 250;
 
 	
 	private float[] daySkyColor = {0.529f, 0.808f, 0.922f,1.0f};
@@ -22,25 +22,37 @@ public class Sun {
 	private float intensity;
 	private float skyTime;
 	private boolean animate;
+	private double lightStep;
 	
-	public Sun(float[] s, float r, int p) {
+	private double terrainWidth;
+	private double terrainLength;
+	
+	public Sun(float[] s, float r, int p, double tw, double tl) {
 		sunlight = s;
 		dynamicSun = s;
 		radius = r;
 		shaderprogram = p;
-		intensity = 0.4f;
+		intensity = 1.0f;
 		animate = false;
 		skyTime = 1.0f;
+		lightStep = 0;
+		terrainWidth = tw;
+		terrainLength = tl;
 	}
 	
 	public void drawSun(GL2 gl, Texture[] tex) {
-		
-
+	
 		gl.glPushMatrix(); {
 			GLU glu = new GLU();
 			GLUquadric quad = glu.gluNewQuadric();
 			
-			gl.glTranslatef(sunlight[0], sunlight[1], sunlight[2]);
+			float sunAmbAndDifL[] = { 2.5f, 2.5f, 2.5f, 1.0f };
+			
+			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, sunAmbAndDifL, 0);
+			
+			float[] pos = getPosition();
+
+			gl.glTranslatef(pos[0], pos[1], pos[2]);
 			
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.SUN].getTextureId());
 			glu.gluQuadricTexture(quad, true);
@@ -54,6 +66,8 @@ public class Sun {
 	public void setLight(GL2 gl) {
 		gl.glUniform1f(gl.glGetUniformLocation(shaderprogram, "intensity"), intensity);
 		
+		float[] pos = getPosition();
+		
         gl.glClearColor(daySkyColor[0], daySkyColor[1], daySkyColor[2], daySkyColor[3]);
 		
 		float ambLight0[] = {0.3f,0.3f,0.3f,1.0f};
@@ -65,7 +79,7 @@ public class Sun {
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambLight0, 0);
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, difLight0, 0);
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, specLight0, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, getPosition(),0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, pos ,0);
 
 		float g = 0.2f; // Global Ambient intensity.
 		int localViewer = 0;
@@ -81,6 +95,11 @@ public class Sun {
 	public float[] getPosition() {
 		if (animate) return dynamicSun;
 		else return sunlight;
+	}
+	
+	public void changeSun() {
+		double angle = lightStep * (2 * Math.PI / lightSlices);
+		dynamicSun[0] = (float)terrainWidth;
 	}
 	
 	
