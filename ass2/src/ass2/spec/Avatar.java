@@ -8,7 +8,7 @@ import ass2.spec.Texture;
 public class Avatar {
 
 	private static final double WALKING_SPEED = 1;
-	private static final double AVARTAR_HEIGHT = 2f;
+	private static final double AVARTAR_HEIGHT = 2.5f;
 	private static final int SLICES = 32;
 
 	private double moveZ = 0;
@@ -92,6 +92,129 @@ public class Avatar {
 				gl.glVertex3d(0.3*Math.cos(angle0), 0.3*Math.sin(angle0), zBack);
 			}
 		} gl.glEnd();
+		
+		
+		
+		
+		gl.glPopMatrix();
+		
+		drawRLeg(gl, tex);
+		drawLLeg(gl, tex);
+		
+		
+	}
+	
+	private void drawLLeg(GL2 gl, Texture[] tex) {
+		
+		double offSet = 0.2;
+		
+		gl.glPushMatrix();
+		
+		gl.glTranslated(0, -2.5, 0);
+		
+		//gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARLLEG].getTextureId());
+		gl.glBegin(GL2.GL_QUADS); { 
+		      // Top face (y = 1.0f)
+		      // Define vertices in counter-clockwise (CCW) order with normal pointing out
+			//gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
+			gl.glVertex3f( (float)(0.1f - offSet), 1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet), 1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet), 1.0f,  0.0f);
+			gl.glVertex3f( (float)(0.1f - offSet), 1.0f,  0.0f);
+		 
+		      // Bottom face (y = -1.0f)
+			//gl.glColor3f(1.0f, 0.5f, 0.0f);     // Orange
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
+		 
+		      // Front face  (z = 1.0f)
+			gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, 0.0f);
+			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, 0.0f);
+			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, 0.0f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, 0.0f);
+		 
+		      // Back face (z = -1.0f)
+			//gl.glColor3f(0.3f, 0.3f, 0.3f);     // Yellow
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+		 
+		      // Left face (x = -1.0f)
+			gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  1.0f,  0.0f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
+		 
+		      // Right face (x = 1.0f)
+			//gl.glColor3f(0.3f, 0.3f, 0.3f);     // Magenta
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
+			gl.glVertex3f( (float)(0.1f- offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.1f - offSet),  1.0f,  0.0f);
+		} gl.glEnd(); 
+		
+		gl.glPopMatrix();
+		
+	}
+		
+private void drawRLeg(GL2 gl, Texture[] tex) {
+		
+		double offSet = - 0.1;
+		
+		gl.glPushMatrix();
+		
+		gl.glTranslated(0, -2.5, 0);
+		
+		//gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARRLEG].getTextureId());
+		gl.glBegin(GL2.GL_QUADS); { 
+		      // Top face (y = 1.0f)
+		      // Define vertices in counter-clockwise (CCW) order with normal pointing out
+			gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
+			gl.glVertex3f( (float)(0.1f - offSet), 1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet), 1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet), 1.0f,  0.0f);
+			gl.glVertex3f( (float)(0.1f - offSet), 1.0f,  0.0f);
+		 
+		      // Bottom face (y = -1.0f)
+			gl.glColor3f(1.0f, 0.5f, 0.0f);     // Orange
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
+		 
+		      // Front face  (z = 1.0f)
+			gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, 0.0f);
+			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, 0.0f);
+			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, 0.0f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, 0.0f);
+		 
+		      // Back face (z = -1.0f)
+			gl.glColor3f(0.3f, 0.3f, 0.3f);     // Yellow
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+		 
+		      // Left face (x = -1.0f)
+			gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.0f - offSet),  1.0f,  0.0f);
+			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
+		 
+		      // Right face (x = 1.0f)
+			gl.glColor3f(0.3f, 0.3f, 0.3f);     // Magenta
+			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
+			gl.glVertex3f( (float)(0.1f- offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
+			gl.glVertex3f( (float)(0.1f - offSet),  1.0f,  0.0f);
+		} gl.glEnd(); 
 		
 		gl.glPopMatrix();
 	}

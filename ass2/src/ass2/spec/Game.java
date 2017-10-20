@@ -45,7 +45,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int AVATARFEET = 4;
 	public final static int BRANCH = 5;
 	public final static int LEAF = 6;
-	
+//	public final static int AVATARRLEG = 7;
+//	public final static int AVATARLLEG = 8;
 
 
 
@@ -148,8 +149,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		loadTextures(gl);
 
 		String path = Paths.get(".").toAbsolutePath().normalize().toString();
-		String vs = path + "/src/ass2/spec/PhongVertex.glsl";
-		String fs = path + "/src/ass2/spec/PhongFragment.glsl";
+		String vs = path + "/ass2/src/ass2/spec/PhongVertex.glsl";
+		String fs = path + "/ass2/src/ass2/spec/PhongFragment.glsl";
 		try {
 			shaderProgram = Shader.initShaders(gl, vs, fs);
 		} catch (Exception e) {
@@ -175,6 +176,12 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		String avatarFeetFile = "textures/minionFeet.png";
 		String avatarFeetExt = "png";
 		
+		String avatarRLegFile = "textures/minionRLeg.png";
+		String avatarRLegExt = "png";
+		
+		String avatarLLegFile = "textures/minionLLeg.png";
+		String avatarLLegExt = "png";
+		
 		String branchFile = "textures/branch.png";
 		String branchExt = "png";
 		
@@ -186,9 +193,11 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures[AVATARHEAD] = new Texture(gl, avatarHeadFile, avatarHeadExt, true);
 		textures[AVATARBODY] = new Texture(gl, avatarBodyFile, avatarBodyExt, true);
 		textures[AVATARFEET] = new Texture(gl, avatarFeetFile, avatarFeetExt, true);
+
 		textures[BRANCH] = new Texture(gl, branchFile, branchExt, true);
 		textures[LEAF] = new Texture(gl, leafFile, leafExt, true);
-
+//		textures[AVATARRLEG] = new Texture(gl, avatarRLegFile, avatarRLegExt, true);
+//		textures[AVATARLLEG] = new Texture(gl, avatarLLegFile, avatarLLegExt, true);
 
 	}
 
@@ -225,10 +234,6 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		if (downKey) {
 			//System.out.print("down");
 			avatar.moveBackward();
-		}
-		if (firstPerson) {
-			//System.out.print("firstPerson");
-			//avatar.firstPerson()
 		}
 	}
 
