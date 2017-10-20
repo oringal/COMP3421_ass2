@@ -45,6 +45,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int AVATARFEET = 4;
 	public final static int BRANCH = 5;
 	public final static int LEAF = 6;
+	public final static int SUN = 7;
 	
 
 
@@ -109,8 +110,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
 
-		myTerrain.setLight(gl, 0);
-		gl.glEnable(GL2.GL_LIGHT0);
+//		myTerrain.setLight(gl, 0);
+//		gl.glEnable(GL2.GL_LIGHT0);
+		
 
 		//double alt = myTerrain.altitude(camera.getPosition()[0], camera.getPosition()[2]);
 
@@ -152,10 +154,13 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		String fs = path + "/ass2/src/ass2/spec/PhongFragment.glsl";
 		try {
 			shaderProgram = Shader.initShaders(gl, vs, fs);
+			myTerrain.setShaderprogram(shaderProgram);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
+		myTerrain.terrainInit();
 
 	}
 	
@@ -180,6 +185,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		
 		String leafFile = "textures/leaf.png";
 		String leafExt = "png";
+		
+		String sunFile = "textures/sun.png";
+		String sunExt = "png";
 				
 		textures[GRASS] = new Texture(gl,grassFile,grassExt,true);
 		textures[ROAD] = new Texture(gl,roadFile,roadExt,true);
@@ -188,6 +196,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures[AVATARFEET] = new Texture(gl, avatarFeetFile, avatarFeetExt, true);
 		textures[BRANCH] = new Texture(gl, branchFile, branchExt, true);
 		textures[LEAF] = new Texture(gl, leafFile, leafExt, true);
+		textures[SUN] = new Texture(gl, sunFile, sunExt, true);
 
 
 	}
