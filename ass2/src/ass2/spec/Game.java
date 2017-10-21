@@ -45,8 +45,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int AVATARFEET = 4;
 	public final static int BRANCH = 5;
 	public final static int LEAF = 6;
-	public final static int AVATARRLEG = 7;
-	public final static int AVATARLLEG = 8;
+	public final static int SUN = 7;
+	public final static int AVATARRLEG = 8;
+	public final static int AVATARLLEG = 9;
 
 
 
@@ -110,8 +111,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
 
-		myTerrain.setLight(gl, 0);
-		gl.glEnable(GL2.GL_LIGHT0);
+//		myTerrain.setLight(gl, 0);
+//		gl.glEnable(GL2.GL_LIGHT0);
+		
 
 		//double alt = myTerrain.altitude(camera.getPosition()[0], camera.getPosition()[2]);
 
@@ -153,54 +155,42 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		String fs = path + "/ass2/src/ass2/spec/PhongFragment.glsl";
 		try {
 			shaderProgram = Shader.initShaders(gl, vs, fs);
+			myTerrain.setShaderprogram(shaderProgram);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
+		myTerrain.terrainInit();
 
 	}
 	
 	private void loadTextures(GL2 gl) {
-		String grassFile = "textures/grass.png";
-		String grassExt = "png";
 		
-		String roadFile = "textures/road.png";
-		String roadExt = "png";
+		String[] texFileName = {	"textures/grass.png",		//0
+									"textures/road.png",  		//1
+									"textures/minionBody.png", 	//2
+									"textures/minionHead.png", 	//3
+									"textures/minionFeet.png", 	//4
+									"textures/branch.png",  	//5
+									"textures/leaf.png", 		//6
+									"textures/sun.png",			//7
+									"textures/minionRLeg.png", 	//8
+									"textures/minionLLeg.png"	//9
+								};
 
-		String avatarHeadFile = "textures/minionHead.png";
-		String avatarHeadExt = "png";
+		String texFileExt = "png";
 		
-		String avatarBodyFile = "textures/minionBody.png";
-		String avatarBodyExt = "png";
-		
-		String avatarFeetFile = "textures/minionFeet.png";
-		String avatarFeetExt = "png";
-		
-		String avatarRLegFile = "textures/minionRLeg.png";
-		String avatarRLegExt = "png";
-		
-		String avatarLLegFile = "textures/minionLLeg.png";
-		String avatarLLegExt = "png";
-		
-		String branchFile = "textures/branch.png";
-		String branchExt = "png";
-		
-		String leafFile = "textures/leaf.png";
-		String leafExt = "png";
-				
-		textures[GRASS] = new Texture(gl,grassFile,grassExt,true);
-		textures[ROAD] = new Texture(gl,roadFile,roadExt,true);
-		textures[AVATARHEAD] = new Texture(gl, avatarHeadFile, avatarHeadExt, true);
-		textures[AVATARBODY] = new Texture(gl, avatarBodyFile, avatarBodyExt, true);
-		textures[AVATARFEET] = new Texture(gl, avatarFeetFile, avatarFeetExt, true);
-
-		textures[BRANCH] = new Texture(gl, branchFile, branchExt, true);
-		textures[LEAF] = new Texture(gl, leafFile, leafExt, true);
-		
-// bug: Caught IndexOutOfBoundsException: Required 7694 remaining bytes in buffer, only had 7548 on thread AWT-EventQueue-0
-//		textures[AVATARRLEG] = new Texture(gl, avatarRLegFile, avatarRLegExt, true);
-//		textures[AVATARLLEG] = new Texture(gl, avatarLLegFile, avatarLLegExt, true);
-
+		textures[GRASS] = new Texture(gl,texFileName[GRASS],texFileExt,true);
+		textures[ROAD] = new Texture(gl,texFileName[ROAD],texFileExt,true);
+		textures[AVATARHEAD] = new Texture(gl, texFileName[AVATARHEAD], texFileExt, true);
+		textures[AVATARBODY] = new Texture(gl, texFileName[AVATARBODY], texFileExt, true);
+		textures[AVATARFEET] = new Texture(gl, texFileName[AVATARFEET], texFileExt, true);
+		textures[BRANCH] = new Texture(gl, texFileName[BRANCH], texFileExt, true);
+		textures[LEAF] = new Texture(gl, texFileName[LEAF], texFileExt, true);
+		textures[SUN] = new Texture(gl, texFileName[SUN], texFileExt, true);
+		textures[AVATARRLEG] = new Texture(gl, texFileName[AVATARRLEG], texFileExt, true);
+		textures[AVATARLLEG] = new Texture(gl, texFileName[AVATARLLEG], texFileExt, true);
 	}
 
 	@Override
