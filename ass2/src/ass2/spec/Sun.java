@@ -23,6 +23,8 @@ public class Sun {
 	private float skyTime;
 	private boolean animate;
 	private double lightStep;
+	private float timeStep = 0.005f;
+
 	
 	private double terrainWidth;
 	private double terrainLength;
@@ -33,7 +35,7 @@ public class Sun {
 		radius = r;
 		shaderprogram = p;
 		intensity = 1.0f;
-		animate = false;
+		animate = true;
 		skyTime = 1.0f;
 		lightStep = 0;
 		terrainWidth = tw;
@@ -63,22 +65,43 @@ public class Sun {
 		
 	}
 	
+	private void renderSky(GL2 gl) {
+		float[] color = {
+				intensity * daySkyColor[0] + (1-intensity) * nightSkyColor[0],
+				intensity * daySkyColor[1] + (1-intensity) * nightSkyColor[1],
+				intensity * daySkyColor[2] + (1-intensity) * nightSkyColor[2],
+				intensity * daySkyColor[3] + (1-intensity) * nightSkyColor[3],
+		};
+		gl.glClearColor(color[0], color[1], color[2], color[3]);
+	}
+	
+	private float[] getDifSpecLight() {
+		float[] light = {
+				intensity * dayLight[0] + (1-intensity) * nightLight[0],
+				intensity * dayLight[1] + (1-intensity) * nightLight[1],
+				intensity * dayLight[2] + (1-intensity) * nightLight[2],
+				intensity * dayLight[3] + (1-intensity) * nightLight[3],
+		};
+		return light;
+	}
+	
 	public void setLight(GL2 gl) {
 		gl.glUniform1f(gl.glGetUniformLocation(shaderprogram, "intensity"), intensity);
+		renderSky(gl);
 		
 		float[] pos = getPosition();
 		
-        gl.glClearColor(daySkyColor[0], daySkyColor[1], daySkyColor[2], daySkyColor[3]);
+//        gl.glClearColor(daySkyColor[0], daySkyColor[1], daySkyColor[2], daySkyColor[3]);
 		
 		float ambLight0[] = {0.3f,0.3f,0.3f,1.0f};
-		float difLight0[] = {1.0f,1.0f,1.0f,1.0f};
-		float specLight0[] = {1.0f,1.0f,1.0f,1.0f};
+		float difSpecLight0[] = getDifSpecLight();
+//		float specLight0[] = {1.0f,1.0f,1.0f,1.0f};
         gl.glEnable(GL2.GL_LIGHT0);
 		
 		/* Light 0 Properties */ 
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambLight0, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, difLight0, 0);
-		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, specLight0, 0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, difSpecLight0, 0);
+		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_SPECULAR, difSpecLight0, 0);
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, pos ,0);
 
 		float g = 0.2f; // Global Ambient intensity.
@@ -97,9 +120,30 @@ public class Sun {
 		else return sunlight;
 	}
 	
+	public void switchAnimate() {
+		animate = !animate;
+	}
+	
+	public boolean checkAnimate() {
+		return animate;
+	}
+	
 	public void changeSun() {
 		double angle = lightStep * (2 * Math.PI / lightSlices);
-		dynamicSun[0] = (float)terrainWidth;
+		dynamicSun[0] = (float) (terrainWidth/2 + 10 * Math.cos(angle));
+		dynamicSun[1] = (float) (terrainWidth/2 + 10 * Math.sin(angle));
+		dynamicSun[2] = 1;
+		lightStep++;
+	}
+	
+	public void update() {
+		intensity += timeStep;
+
+		if (intensity > 1 || intensity <= 0.4f) {
+			timeStep = -timeStep;
+		}	
+		changeSun();
+	
 	}
 	
 	
