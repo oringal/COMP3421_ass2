@@ -17,6 +17,14 @@ import com.jogamp.opengl.GLAutoDrawable;
  *
  * @author malcolmr
  */
+/**
+ * @author antheny
+ *
+ */
+/**
+ * @author antheny
+ *
+ */
 public class Terrain {
 
 	private Dimension mySize;
@@ -24,7 +32,8 @@ public class Terrain {
 	private List<Tree> myTrees;
 	private List<Road> myRoads;
 	private float[] mySunlight;
-	private Light  myLight;
+	private Sun mySun;
+	private int shaderprogram;
 
 
 	/**
@@ -39,8 +48,6 @@ public class Terrain {
 		myTrees = new ArrayList<Tree>();
 		myRoads = new ArrayList<Road>();
 		mySunlight = new float[3];
-		myLight = new Light();
-
 	}
 
 	public Terrain(Dimension size) {
@@ -77,6 +84,7 @@ public class Terrain {
 		mySunlight[1] = dy;
 		mySunlight[2] = dz;
 	}
+	
 
 	/**
 	 * Resize the terrain, copying any old altitudes.
@@ -116,6 +124,14 @@ public class Terrain {
 	 */
 	public void setGridAltitude(int x, int z, double h) {
 		myAltitude[x][z] = h;
+	}
+	/**
+	 * Set the shader program as defined in Game.java
+	 * @param s
+	 */
+	public void setShaderprogram(int s) {
+		System.out.println(s);
+		shaderprogram = s;
 	}
 
 	/**
@@ -202,13 +218,20 @@ public class Terrain {
 		myRoads.add(road);
 	}
 	
-	public void setLight(GL2 gl, double angle) {
-		this.myLight.setLight(gl);
+	public void setLight(GL2 gl) {
+		this.mySun.setLight(gl);
+	}
+	
+	public void terrainInit() {
+		mySun = new Sun(mySunlight, 1, shaderprogram, size().getWidth(), size().getHeight());
 	}
 
 	public void draw(GL2 gl, Texture[] tex) {
 		
-		/* Material properties */
+		setLight(gl);
+        drawSun(gl,tex);
+
+        /* Material properties */
 		float [] ad = {1.0f, 1.0f, 1.0f, 1.0f}; 
 		float [] sp = {0.2f, 0.2f, 0.2f, 1.0f}; 
 		float [] sh = {0f, 0f, 0f, 1.0f}; 
@@ -221,6 +244,8 @@ public class Terrain {
         drawRoads(gl,tex);
         gl.glEnable(GL2.GL_CULL_FACE);
         drawTrees(gl,tex);
+        mySun.update();
+
 
 	}
 
@@ -299,7 +324,7 @@ public class Terrain {
 				maxAlt = Math.max(curr,  maxAlt);
 			}
 //	        if (Game.debug) System.out.println("MaxALt: " + maxAlt);
-			r.setAltitude(maxAlt + 0.1);
+			r.setAltitude(maxAlt + 0.001);
 		}
 		/*
 		 * Draw Roads
@@ -315,6 +340,10 @@ public class Terrain {
 			t.drawTree(gl, tex);
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 		}
+	}
+	
+	public void drawSun(GL2 gl, Texture[] tex) {
+		mySun.drawSun(gl, tex);
 	}
 	
     public void incTreeDepth() {

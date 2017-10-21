@@ -60,8 +60,8 @@ void main (void) {
     //gl_FragColor = gl_FrontMaterial.emission + globalAmbient + ambient + diffuse + specular;
 
     //gl_FragColor = mix(texture2D(texUnit1,texCoordV),texture(texUnit2,texCoordV),0.25);
-	
+//	gl_FragColor = (texture2D(texUnit1,texCoordV) * (gl_FrontMaterial.emission + globalAmbient + ambient + diffuse) + specular);
+    gl_FragColor = (texture2D(texUnit1,texCoordV) * (gl_FrontMaterial.emission + globalAmbient + ambient + diffuse) + specular) * intensity;
 
-	gl_FragColor = texture2D(texUnit1,texCoordV);
 }
 
