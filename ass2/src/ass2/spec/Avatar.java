@@ -27,16 +27,16 @@ public class Avatar {
 			return;
 		}
 		
-		gl.glPushMatrix();
-		
-		double[] cameraPosition = camera.getPosition();
-		// moves back and forth with camera
-		gl.glTranslated(cameraPosition[0], cameraPosition[1] + AVARTAR_HEIGHT, cameraPosition[2]);
-		// turns with camera
-		gl.glRotated(camera.getAngle(), 0, 1, 0);
-		
-		drawCylinder(gl, tex);
-		
+		gl.glPushMatrix();{
+			
+			double[] cameraPosition = camera.getPosition();
+			// moves back and forth with camera
+			gl.glTranslated(cameraPosition[0], cameraPosition[1] + AVARTAR_HEIGHT, cameraPosition[2]);
+			// turns with camera
+			gl.glRotated(camera.getAngle(), 0, 1, 0);
+			
+			drawCylinder(gl, tex);
+		}
 		gl.glPopMatrix();
 
 	}

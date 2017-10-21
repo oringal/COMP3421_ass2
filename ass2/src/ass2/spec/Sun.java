@@ -30,8 +30,10 @@ public class Sun {
 	private double terrainLength;
 	
 	public Sun(float[] s, float r, int p, double tw, double tl) {
-		sunlight = s;
-		dynamicSun = s;
+		sunlight = new float[3];
+		sunlight = s.clone();
+		dynamicSun = new float[3];
+		dynamicSun = s.clone();
 		radius = r;
 		shaderprogram = p;
 		intensity = 1.0f;
@@ -53,6 +55,7 @@ public class Sun {
 			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, sunAmbAndDifL, 0);
 			
 			float[] pos = getPosition();
+			System.out.println("Position: " + pos[0] + ", " + pos[1] + ", " + pos[2]);
 
 			gl.glTranslatef(pos[0], pos[1], pos[2]);
 			
@@ -90,9 +93,7 @@ public class Sun {
 		renderSky(gl);
 		
 		float[] pos = getPosition();
-		
-//        gl.glClearColor(daySkyColor[0], daySkyColor[1], daySkyColor[2], daySkyColor[3]);
-		
+
 		float ambLight0[] = {0.3f,0.3f,0.3f,1.0f};
 		float difSpecLight0[] = getDifSpecLight();
 //		float specLight0[] = {1.0f,1.0f,1.0f,1.0f};
@@ -110,18 +111,29 @@ public class Sun {
 
 		// Global light properties
 		gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, globAmb, 0); // Global ambient light.
-//		gl.glLightModeli(GL2.GL_LIGHT_MODEL_LOCAL_VIEWER, localViewer); // Enable local viewpoint
         gl.glLightModeli(GL2.GL_LIGHT_MODEL_TWO_SIDE, GL2.GL_TRUE); // Enable two-sided lighting.
+        if (animate) {
+            update();
+        }
 
 	}
 	
 	public float[] getPosition() {
 		if (animate) return dynamicSun;
-		else return sunlight;
+		else { 
+			System.out.println("askjkdjfldhf");
+			return sunlight;
+		}
 	}
 	
 	public void switchAnimate() {
-		animate = !animate;
+		if (animate) {
+			animate = false;
+			intensity = 1.0f;
+		} else {
+			animate = true;
+		}
+			
 	}
 	
 	public boolean checkAnimate() {
@@ -131,8 +143,8 @@ public class Sun {
 	public void changeSun() {
 		double angle = lightStep * (2 * Math.PI / lightSlices);
 		dynamicSun[0] = (float) (terrainWidth/2 + 10 * Math.cos(angle));
-		dynamicSun[1] = (float) (terrainWidth/2 + 10 * Math.sin(angle));
-		dynamicSun[2] = 1;
+		dynamicSun[2] = (float) (terrainLength/2 + 10 * Math.sin(angle));
+		dynamicSun[1] = 3;
 		lightStep++;
 	}
 	
@@ -143,7 +155,6 @@ public class Sun {
 			timeStep = -timeStep;
 		}	
 		changeSun();
-	
 	}
 	
 	

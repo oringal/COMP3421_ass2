@@ -244,7 +244,6 @@ public class Terrain {
         drawRoads(gl,tex);
         gl.glEnable(GL2.GL_CULL_FACE);
         drawTrees(gl,tex);
-        mySun.update();
 
 
 	}
@@ -353,6 +352,10 @@ public class Terrain {
     public void decTreeDepth() {
         for (Tree t : myTrees)
             t.decDepth();
+    }
+    
+    public void switchAnimate() {
+    	mySun.switchAnimate();
     }
 
 
