@@ -55,8 +55,6 @@ public class Sun {
 			gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, sunAmbAndDifL, 0);
 			
 			float[] pos = getPosition();
-			System.out.println("Position: " + pos[0] + ", " + pos[1] + ", " + pos[2]);
-
 			gl.glTranslatef(pos[0], pos[1], pos[2]);
 			
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.SUN].getTextureId());
@@ -121,7 +119,6 @@ public class Sun {
 	public float[] getPosition() {
 		if (animate) return dynamicSun;
 		else { 
-			System.out.println("askjkdjfldhf");
 			return sunlight;
 		}
 	}

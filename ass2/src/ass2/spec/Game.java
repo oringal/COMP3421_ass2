@@ -48,7 +48,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int SUN = 7;
 	public final static int AVATARRLEG = 8;
 	public final static int AVATARLLEG = 9;
-	
+
 	public Game(Terrain terrain) {
 		super("Assignment 2");
 		myTerrain = terrain;
@@ -187,6 +187,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures[SUN] = new Texture(gl, texFileName[SUN], texFileExt, true);
 //		textures[AVATARRLEG] = new Texture(gl, texFileName[AVATARRLEG], texFileExt, true);
 //		textures[AVATARLLEG] = new Texture(gl, texFileName[AVATARLLEG], texFileExt, true);
+
 
 	}
 
