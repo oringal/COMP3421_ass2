@@ -45,8 +45,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public final static int AVATARFEET = 4;
 	public final static int BRANCH = 5;
 	public final static int LEAF = 6;
-//	public final static int AVATARRLEG = 7;
-//	public final static int AVATARLLEG = 8;
+	public final static int AVATARRLEG = 7;
+	public final static int AVATARLLEG = 8;
 
 
 
@@ -196,6 +196,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 
 		textures[BRANCH] = new Texture(gl, branchFile, branchExt, true);
 		textures[LEAF] = new Texture(gl, leafFile, leafExt, true);
+		
+// bug: Caught IndexOutOfBoundsException: Required 7694 remaining bytes in buffer, only had 7548 on thread AWT-EventQueue-0
 //		textures[AVATARRLEG] = new Texture(gl, avatarRLegFile, avatarRLegExt, true);
 //		textures[AVATARLLEG] = new Texture(gl, avatarLLegFile, avatarLLegExt, true);
 
