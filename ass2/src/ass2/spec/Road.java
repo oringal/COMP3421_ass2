@@ -6,11 +6,10 @@ import java.util.List;
 import com.jogamp.opengl.GL2;
 
 /**
- * COMMENT: Comment Road 
- *
- * @author malcolmr
+ * @author antheny and gladys
  */
 public class Road {
+	private final static boolean debug = false;
 
 	private List<Double> myPoints;
 	private double myWidth;
@@ -171,10 +170,12 @@ public class Road {
         double[] upVec = new double[] {0,1,0};
         gl.glNormal3dv(upVec,0);
         
+        /*
+         * keep track of which half of the texture is being drawn
+         * the texture will start to blend into each half
+         */
         int c = 0;
-        
-//        if (Game.debug) System.out.println("Altitude: " + altitude);
-        
+               
         for (double i = 0; i < size() - 0.02; i+=0.02) {
         	double[] currP = point(i);
         	double[] nextP = point(i+0.02);
@@ -200,6 +201,7 @@ public class Road {
 
         }
         gl.glEnd();
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
         gl.glPopMatrix();
 	}
 

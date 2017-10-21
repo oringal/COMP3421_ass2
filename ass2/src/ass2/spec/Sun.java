@@ -3,8 +3,13 @@ package ass2.spec;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
-
+/**
+ * @author antheny and gladys
+ */
 public class Sun {
+	private final static boolean debug = false;
+
+	
 	private static final double SIZE = 1;
 	private static final int SLICES = 32;
 	private static final double lightSlices = 250;
@@ -17,11 +22,11 @@ public class Sun {
 	
 	private float[] sunlight;
 	private float[] dynamicSun;
-	private float radius;
 	private int shaderprogram;
 	private float intensity;
-	private float skyTime;
 	private boolean animate;
+	private boolean nightMode;
+	private boolean dayMode;
 	private double lightStep;
 	private float timeStep = 0.005f;
 
@@ -29,21 +34,24 @@ public class Sun {
 	private double terrainWidth;
 	private double terrainLength;
 	
-	public Sun(float[] s, float r, int p, double tw, double tl) {
+	public Sun(float[] s, int p, double tw, double tl) {
 		sunlight = new float[3];
 		sunlight = s.clone();
 		dynamicSun = new float[3];
 		dynamicSun = s.clone();
-		radius = r;
 		shaderprogram = p;
 		intensity = 1.0f;
 		animate = true;
-		skyTime = 1.0f;
+		nightMode = false;
+		dayMode = true;
 		lightStep = 0;
 		terrainWidth = tw;
 		terrainLength = tl;
 	}
 	
+	/*
+	 * Draw sun object according to position
+	 */
 	public void drawSun(GL2 gl, Texture[] tex) {
 	
 		gl.glPushMatrix(); {
@@ -61,7 +69,7 @@ public class Sun {
 			glu.gluQuadricTexture(quad, true);
 			glu.gluSphere(quad, SIZE, SLICES, SLICES);
 		}
-
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 		gl.glPopMatrix();
 		
 	}
@@ -86,6 +94,9 @@ public class Sun {
 		return light;
 	}
 	
+	/*
+	 * render the directional light
+	 */
 	public void setLight(GL2 gl) {
 		gl.glUniform1f(gl.glGetUniformLocation(shaderprogram, "intensity"), intensity);
 		renderSky(gl);
@@ -104,23 +115,27 @@ public class Sun {
 		gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_POSITION, pos ,0);
 
 		float g = 0.2f; // Global Ambient intensity.
-		int localViewer = 0;
 		float globAmb[] = { g, g, g, 0.0f };
 
 		// Global light properties
 		gl.glLightModelfv(GL2.GL_LIGHT_MODEL_AMBIENT, globAmb, 0); // Global ambient light.
         gl.glLightModeli(GL2.GL_LIGHT_MODEL_TWO_SIDE, GL2.GL_TRUE); // Enable two-sided lighting.
-        if (animate) {
-            update();
+        
+
+        if (nightMode) {
+        	intensity = 0.4f;
         }
+        if (dayMode && !animate) {
+        	intensity = 1.0f;
+        }
+        
+        if (animate) update();
 
 	}
 	
 	public float[] getPosition() {
 		if (animate) return dynamicSun;
-		else { 
-			return sunlight;
-		}
+		else	return sunlight;
 	}
 	
 	public void switchAnimate() {
@@ -133,25 +148,37 @@ public class Sun {
 			
 	}
 	
+	public void switchNightMode() {
+		nightMode = !nightMode;
+		dayMode = !dayMode;
+	}
+
 	public boolean checkAnimate() {
 		return animate;
 	}
 	
-	public void changeSun() {
-		double angle = lightStep * (2 * Math.PI / lightSlices);
-		dynamicSun[0] = (float) (terrainWidth/2 + 10 * Math.cos(angle));
-		dynamicSun[2] = (float) (terrainLength/2 + 10 * Math.sin(angle));
-		dynamicSun[1] = 3;
-		lightStep++;
+	public boolean getNightMode() {
+		return nightMode;
+	}
+	
+	public boolean getDayMode() {
+		return dayMode;
 	}
 	
 	public void update() {
-		intensity += timeStep;
+		if (animate) {
+			intensity += timeStep;
 
-		if (intensity > 1 || intensity <= 0.4f) {
-			timeStep = -timeStep;
-		}	
-		changeSun();
+			if (intensity > 1 || intensity <= 0.4f) {
+				timeStep = -timeStep;
+			}	
+			/* --------------------------- */
+			double angle = lightStep * (2 * Math.PI / lightSlices);
+			dynamicSun[0] = (float) (terrainWidth/2 + 10 * Math.cos(angle));
+			dynamicSun[2] = (float) (terrainLength/2 + 10 * Math.sin(angle));
+			dynamicSun[1] = 2.8f;
+			lightStep++;
+		}
 	}
 	
 	

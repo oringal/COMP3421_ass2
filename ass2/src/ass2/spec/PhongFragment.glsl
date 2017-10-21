@@ -1,5 +1,8 @@
 #version 120
 
+/*
+ * Taken from week 8 lecture code
+ */
 varying vec2 texCoordV;
 
 uniform sampler2D texUnit1;

@@ -15,14 +15,12 @@ import java.nio.file.Paths;
 
 
 /**
- * COMMENT: Comment Game 
- *
- * @author malcolmr
+ * @author antheny and gladys
  */
 public class Game extends JFrame implements GLEventListener, KeyListener{
 	
 	/* Debugger mode */
-	public final static boolean debug = false;
+	private final static boolean debug = false;
 
 
 	private Terrain myTerrain;
@@ -106,10 +104,6 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
-
-//		myTerrain.setLight(gl, 0);
-//		gl.glEnable(GL2.GL_LIGHT0);
-		
 
 		//double alt = myTerrain.altitude(camera.getPosition()[0], camera.getPosition()[2]);
 
@@ -257,6 +251,9 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		}
 		if (e.getKeyCode() == KeyEvent.VK_L) {
 			myTerrain.switchAnimate();
+		}
+		if (e.getKeyCode() == KeyEvent.VK_N) {
+			myTerrain.switchNightMode();
 		}
 
 	}

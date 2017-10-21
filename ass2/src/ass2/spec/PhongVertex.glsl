@@ -1,5 +1,8 @@
 #version 120
 
+/*
+ * Taken from week 8 lecture code
+ */
 varying vec3 N;
 varying vec4 v;
 

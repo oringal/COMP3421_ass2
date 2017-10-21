@@ -6,7 +6,7 @@ import com.jogamp.opengl.GL2;
 
 /**
  * 
- * @author 
+ * @author antheny and gladys
  */
 public class Tree {
 
@@ -95,7 +95,6 @@ public class Tree {
 		}
 		// Manually add length to the trunk
 		draw = "FFFFF" + draw;
-//		if (Game.debug) System.out.println("the lsystem: " + draw);
 		
         // Draw   
         gl.glDisable(GL2.GL_CULL_FACE);

@@ -1,3 +1,7 @@
+/**
+ * Taken from week 8 lecture code
+ */
+
 package ass2.spec;
 
 import java.io.BufferedReader;
@@ -13,7 +17,7 @@ import com.jogamp.opengl.GL2;
 /**
  * From week 6 lecture code
  *
- * @author 
+ * @author antheny and gladys
  */
 public class Shader {
 	

@@ -13,9 +13,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 /**
- * COMMENT: Comment LevelIO 
- *
- * @author malcolmr
+ * @author antheny and gladys
  */
 public class LevelIO {
 

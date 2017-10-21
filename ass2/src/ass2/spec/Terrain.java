@@ -8,24 +8,14 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 
-
-
-
-
 /**
- * COMMENT: Comment HeightMap
- *
- * @author malcolmr
- */
-/**
- * @author antheny
+ * @author antheny and gladys
  *
  */
-/**
- * @author antheny
- *
- */
+
 public class Terrain {
+	private final static boolean debug = false;
+
 
 	private Dimension mySize;
 	private double[][] myAltitude;
@@ -130,7 +120,6 @@ public class Terrain {
 	 * @param s
 	 */
 	public void setShaderprogram(int s) {
-		System.out.println(s);
 		shaderprogram = s;
 	}
 
@@ -166,28 +155,18 @@ public class Terrain {
 		double forwardZ = Math.ceil(z);
 
 		if (x%1 != 0 && z%1 != 0) { // both not integers
-			if(Game.debug) System.out.println("in 1");
 			double left = altitude(leftX, z);
 			double right = altitude(rightX, z);
 			altitude = (x - leftX)/(rightX - leftX) * right + (rightX - x)/(rightX - leftX) * left;
-			
 		} else if (x%1 != 0) { // interpolate z axis
-			if(Game.debug) System.out.println("in 2");
-//			if(Game.debug) System.out.println(z + " ," + backZ + " ," + forwardZ);
 			double part1 = ( (x - leftX) / (rightX - leftX) ) * getGridAltitude((int)rightX, (int)z) ;
 			double part2 = ( (rightX - x) / (rightX - leftX) ) * getGridAltitude((int)leftX, (int)z) ;
-			
-			if(Game.debug) System.out.println("part1: " + part1 + " part2: " + part2);
 			altitude = part1 + part2;
-
 		} else if (z%1 != 0) { // interpolate x axis
-			if(Game.debug) System.out.println("in 3");
 			double part1 = ( (z - backZ) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)forwardZ) ;
 			double part2 = ( (forwardZ - z) / (forwardZ - backZ) ) * getGridAltitude((int)x, (int)backZ) ;
 			altitude = part1 + part2;
 		} else { // both are integers
-			if(Game.debug) System.out.println("in 4");
-
 			altitude = getGridAltitude((int) x, (int) z);
 		}
 
@@ -222,16 +201,22 @@ public class Terrain {
 		this.mySun.setLight(gl);
 	}
 	
+	/*
+	 * Called from Game.init(), to help initialise objects after shaderprogram has been loaded. 
+	 */
 	public void terrainInit() {
-		mySun = new Sun(mySunlight, 1, shaderprogram, size().getWidth(), size().getHeight());
+		mySun = new Sun(mySunlight, shaderprogram, size().getWidth(), size().getHeight());
 	}
 
+	/*
+	 * Start drawing the terrain and scene (not avatar)
+	 */
 	public void draw(GL2 gl, Texture[] tex) {
 		
-//		setLight(gl);
-        //drawSun(gl,tex);
+		setLight(gl);
+        drawSun(gl,tex);
 
-        /* Material properties */
+        /* Material properties for the terrain */
 		float [] ad = {1.0f, 1.0f, 1.0f, 1.0f}; 
 		float [] sp = {0.2f, 0.2f, 0.2f, 1.0f}; 
 		float [] sh = {0f, 0f, 0f, 1.0f}; 
@@ -244,14 +229,12 @@ public class Terrain {
         drawRoads(gl,tex);
         gl.glEnable(GL2.GL_CULL_FACE);
         drawTrees(gl,tex);
-<<<<<<< HEAD
-        //mySun.update();
-=======
->>>>>>> 0c849dd4c857e9b9bbc4cfeac31709548e954d9a
-
-
+        mySun.update();
 	}
 
+	/**
+	 * Draw the 2 triangles and calculate their normals
+	 */
 	public void drawTerrain(GL2 gl, Texture[] tex) {
 
 		gl.glPushMatrix();
@@ -263,8 +246,6 @@ public class Terrain {
 		double width = size.getWidth();
 
 		gl.glBegin(GL2.GL_TRIANGLES);
-//		gl.glBegin(GL2.GL_TRIANGLE_STRIP);
-
 
 		for (double z = 0; z < (height-1); z+=1) {
 
@@ -296,19 +277,11 @@ public class Terrain {
 
 				gl.glTexCoord2d(1, 0);
 				gl.glVertex3dv(p2, 0);
-
-//    			if (Game.debug) System.out.println("#####");
-//    			printArray(p1);
-//    			printArray(p2);
-//    			printArray(p3);
-//    			printArray(p4);
-//    			if (Game.debug) System.out.println("#####");
 			}
 		}
 		gl.glEnd();
 		gl.glPopMatrix();
         gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
-
 	}
 	
 	public void drawRoads(GL2 gl, Texture[] tex) {
@@ -321,12 +294,9 @@ public class Terrain {
 			double maxAlt = 0;
 			for (int i = 0; i < r.size(); i++) {
 				double[] p = r.point(i);
-				if (Game.debug) System.out.println("points: " + p[0]+ ", " + p[1]);
 				double curr = altitude(p[0], p[1]);
-		        if (Game.debug) System.out.println("curr: " + curr);
 				maxAlt = Math.max(curr,  maxAlt);
 			}
-//	        if (Game.debug) System.out.println("MaxALt: " + maxAlt);
 			r.setAltitude(maxAlt + 0.001);
 		}
 		/*
@@ -335,7 +305,6 @@ public class Terrain {
 		for (Road r: myRoads) {
 			r.drawSelf(gl, tex);
 		}
-		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 	}
 	
 	public void drawTrees(GL2 gl, Texture[] tex) {
@@ -349,6 +318,9 @@ public class Terrain {
 		mySun.drawSun(gl, tex);
 	}
 	
+	/*
+	 * The functions below are used when key events are triggered
+	 */
     public void incTreeDepth() {
         for (Tree t : myTrees)
             t.incDepth();
@@ -361,13 +333,17 @@ public class Terrain {
     public void switchAnimate() {
     	mySun.switchAnimate();
     }
-
-
-	private void printArray(double[] arr) {
+    
+    public void switchNightMode() {
+    	mySun.switchNightMode();
+    }
+    
+    
+    private void printArray(double[] arr) {
 		for (int i = 0; i < arr.length; i++) {
-			if (Game.debug) System.out.print(arr[i] + ", ");
+			if (debug) System.out.print(arr[i] + ", ");
 		}
-		if (Game.debug) System.out.println();
+		if (debug) System.out.println();
 	}
 	
 }

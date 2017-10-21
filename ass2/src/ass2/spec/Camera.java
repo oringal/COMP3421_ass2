@@ -2,7 +2,9 @@ package ass2.spec;
 
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
-
+/**
+ * @author antheny and gladys
+ */
 public class Camera {
     
     private static final double WALKING_SPEED = 0.2;

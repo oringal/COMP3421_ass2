@@ -4,7 +4,9 @@ import com.jogamp.opengl.GL2;
 
 import ass2.spec.Camera;
 import ass2.spec.Texture;
-
+/**
+ * @author antheny and gladys
+ */
 public class Avatar {
 
 	private static final double WALKING_SPEED = 1;
