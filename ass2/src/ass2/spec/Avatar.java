@@ -107,7 +107,7 @@ public class Avatar {
 		
 		gl.glTranslated(0, -2.5, 0);
 		
-		//gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, tex[Game.AVATARLLEG].getTextureId());
+		//gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARLLEG].getTextureId());
 		gl.glBegin(GL2.GL_QUADS); { 
 		    // Top face (y = 1.0f)
 		    // Define vertices in counter-clockwise (CCW) order with normal pointing out
@@ -128,7 +128,7 @@ public class Avatar {
 		 
 		      // Front face  (z = 1.0f)
 			//gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
-			//gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
+//			gl.glColor3f(0.5f, 0.5f, 0.0f);  // yellow
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, 0.0f);
 			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, 0.0f);
 			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, 0.0f);
@@ -170,46 +170,46 @@ public class Avatar {
 		
 		gl.glTranslated(0, -2.5, 0);
 		
-		//gl.glBindTexture(GL2.GL_TEXTURE_CUBE_MAP, tex[Game.AVATARRLEG].getTextureId());
+		//gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARRLEG].getTextureId());
 		gl.glBegin(GL2.GL_QUADS); { 
 		      // Top face (y = 1.0f)
 		      // Define vertices in counter-clockwise (CCW) order with normal pointing out
-			gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
+//			gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
 			gl.glVertex3f( (float)(0.1f - offSet), 1.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet), 1.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet), 1.0f,  0.0f);
 			gl.glVertex3f( (float)(0.1f - offSet), 1.0f,  0.0f);
 		 
 		      // Bottom face (y = -1.0f)
-			gl.glColor3f(1.0f, 0.5f, 0.0f);     // Orange
+//			gl.glColor3f(1.0f, 0.5f, 0.0f);     // Orange
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
 		 
 		      // Front face  (z = 1.0f)
-			gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
+//			gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, 0.0f);
 			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, 0.0f);
 			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, 0.0f);
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, 0.0f);
 		 
 		      // Back face (z = -1.0f)
-			gl.glColor3f(0.3f, 0.3f, 0.3f);     // Yellow
+//			gl.glColor3f(0.3f, 0.3f, 0.3f);     // Yellow
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
 			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
 		 
 		      // Left face (x = -1.0f)
-			gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+//			gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  1.0f,  0.0f);
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
 		 
 		      // Right face (x = 1.0f)
-			gl.glColor3f(0.3f, 0.3f, 0.3f);     // Magenta
+//			gl.glColor3f(0.3f, 0.3f, 0.3f);     // Magenta
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
 			gl.glVertex3f( (float)(0.1f- offSet),  0.0f, -0.1f);
 			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);

@@ -228,8 +228,8 @@ public class Terrain {
 
 	public void draw(GL2 gl, Texture[] tex) {
 		
-		setLight(gl);
-        drawSun(gl,tex);
+//		setLight(gl);
+        //drawSun(gl,tex);
 
         /* Material properties */
 		float [] ad = {1.0f, 1.0f, 1.0f, 1.0f}; 
@@ -244,7 +244,7 @@ public class Terrain {
         drawRoads(gl,tex);
         gl.glEnable(GL2.GL_CULL_FACE);
         drawTrees(gl,tex);
-        mySun.update();
+        //mySun.update();
 
 
 	}
