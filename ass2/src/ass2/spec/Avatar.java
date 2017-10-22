@@ -158,6 +158,7 @@ public class Avatar {
 	    	
 			gl.glTexCoord2d(0, 1);
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, 0.0f);
+
 //
 //			// Back face (z = -1.0f)
 //			//gl.glColor3f(0.3f, 0.3f, 0.3f);     // Yellow
@@ -184,6 +185,7 @@ public class Avatar {
 //			gl.glVertex3f( (float)(0.1f- offSet),  0.0f, -0.1f);
 //			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
 //			gl.glVertex3f( (float)(0.1f - offSet),  1.0f,  0.0f);
+
 		} gl.glEnd(); 
 
 		gl.glPopMatrix();
@@ -206,6 +208,7 @@ public class Avatar {
 			// Top face (y = 1.0f)
 			// Define vertices in counter-clockwise (CCW) order with normal pointing out
 			//			gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
+			gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
 			gl.glVertex3f( (float)(0.1f - offSet), 1.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet), 1.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet), 1.0f,  0.0f);
@@ -213,13 +216,13 @@ public class Avatar {
 
 			// Bottom face (y = -1.0f)
 			//			gl.glColor3f(1.0f, 0.5f, 0.0f);     // Orange
+			gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
 
 //			// Front face  (z = 1.0f)
-
 	    	gl.glNormal3d(0,0,1);
 	    	
 	    	gl.glTexCoord2d(1, 1);
@@ -244,6 +247,7 @@ public class Avatar {
 
 			// Left face (x = -1.0f)
 			//			gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+			gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
 			gl.glVertex3f( (float)(0.0f - offSet),  1.0f,  0.0f);
@@ -251,8 +255,9 @@ public class Avatar {
 
 			// Right face (x = 1.0f)
 			//			gl.glColor3f(0.3f, 0.3f, 0.3f);     // Magenta
+			//gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
-			gl.glVertex3f( (float)(0.1f- offSet),  0.0f, -0.1f);
+			gl.glVertex3f( (float)(0.1f- offSet),   0.0f, -0.1f);
 			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
 			gl.glVertex3f( (float)(0.1f - offSet),  1.0f,  0.0f);
 		} gl.glEnd(); 

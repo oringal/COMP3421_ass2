@@ -184,6 +184,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 //		textures[AVATARLLEG] = new Texture(gl, leg2, leg2Ext, true);
 		
 
+
 	}
 
 	@Override
