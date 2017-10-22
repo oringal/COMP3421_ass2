@@ -4,18 +4,16 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GLAutoDrawable;
 
 /**
- * @author antheny and gladys
- *
+ * Generates a terrain.
+ * @author Antheny and Gladys
  */
 
 public class Terrain {
-	private final static boolean debug = false;
-
+	
+	//private final static boolean debug = false;
 
 	private Dimension mySize;
 	private double[][] myAltitude;
@@ -74,7 +72,7 @@ public class Terrain {
 		mySunlight[1] = dy;
 		mySunlight[2] = dz;
 	}
-	
+
 
 	/**
 	 * Resize the terrain, copying any old altitudes.
@@ -115,6 +113,7 @@ public class Terrain {
 	public void setGridAltitude(int x, int z, double h) {
 		myAltitude[x][z] = h;
 	}
+	
 	/**
 	 * Set the shader program as defined in Game.java
 	 * @param s
@@ -196,40 +195,40 @@ public class Terrain {
 		Road road = new Road(width, spine);
 		myRoads.add(road);
 	}
-	
+
 	public void setLight(GL2 gl) {
 		this.mySun.setLight(gl);
 	}
-	
-	/*
-	 * Called from Game.init(), to help initialise objects after shaderprogram has been loaded. 
+
+	/**
+	 * Called from Game.init(), to help initialise objects after shader program has been loaded. 
 	 */
 	public void terrainInit() {
 		mySun = new Sun(mySunlight, shaderprogram, size().getWidth(), size().getHeight());
 	}
 
-	/*
+	/**
 	 * Start drawing the terrain and scene (not avatar)
 	 */
 	public void draw(GL2 gl, Texture[] tex) {
-		
-		setLight(gl);
-        drawSun(gl,tex);
 
-        /* Material properties for the terrain */
+		setLight(gl);
+		drawSun(gl,tex);
+
+		/* Material properties for the terrain */
 		float [] ad = {1.0f, 1.0f, 1.0f, 1.0f}; 
 		float [] sp = {0.2f, 0.2f, 0.2f, 1.0f}; 
 		float [] sh = {0f, 0f, 0f, 1.0f}; 
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_AMBIENT_AND_DIFFUSE, ad,0);
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SPECULAR, sp,0);
 		gl.glMaterialfv(GL2.GL_FRONT, GL2.GL_SHININESS, sh,0);
-		
+
 		drawTerrain(gl, tex);
-        gl.glDisable(GL2.GL_CULL_FACE);
-        drawRoads(gl,tex);
-        gl.glEnable(GL2.GL_CULL_FACE);
-        drawTrees(gl,tex);
-        mySun.update();
+		gl.glDisable(GL2.GL_CULL_FACE);
+		drawRoads(gl,tex);
+		gl.glEnable(GL2.GL_CULL_FACE);
+		drawTrees(gl,tex);
+		mySun.update();
 	}
 
 	/**
@@ -267,7 +266,7 @@ public class Terrain {
 
 				gl.glTexCoord2d(1, 0);
 				gl.glVertex3dv(p2,0);
-// --------------------------------------------------------
+				// --------------------------------------------------------
 				gl.glNormal3dv(norm2,0);
 				gl.glTexCoord2d(0, 1);
 				gl.glVertex3dv(p3,0);
@@ -281,11 +280,11 @@ public class Terrain {
 		}
 		gl.glEnd();
 		gl.glPopMatrix();
-        gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 	}
-	
+
 	public void drawRoads(GL2 gl, Texture[] tex) {
-		
+
 		/* 
 		 * Find the highest point to place the road on 
 		 * given the terrain
@@ -306,44 +305,44 @@ public class Terrain {
 			r.drawSelf(gl, tex);
 		}
 	}
-	
+
 	public void drawTrees(GL2 gl, Texture[] tex) {
 		for (Tree t : myTrees) {
 			t.drawTree(gl, tex);
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 		}
 	}
-	
+
 	public void drawSun(GL2 gl, Texture[] tex) {
 		mySun.drawSun(gl, tex);
 	}
-	
+
 	/*
 	 * The functions below are used when key events are triggered
 	 */
-    public void incTreeDepth() {
-        for (Tree t : myTrees)
-            t.incDepth();
-    }
-    public void decTreeDepth() {
-        for (Tree t : myTrees)
-            t.decDepth();
-    }
-    
-    public void switchAnimate() {
-    	mySun.switchAnimate();
-    }
-    
-    public void switchNightMode() {
-    	mySun.switchNightMode();
-    }
-    
-    
-    private void printArray(double[] arr) {
-		for (int i = 0; i < arr.length; i++) {
-			if (debug) System.out.print(arr[i] + ", ");
-		}
-		if (debug) System.out.println();
+	public void incTreeDepth() {
+		for (Tree t : myTrees)
+			t.incDepth();
 	}
-	
+	public void decTreeDepth() {
+		for (Tree t : myTrees)
+			t.decDepth();
+	}
+
+	public void switchAnimate() {
+		mySun.switchAnimate();
+	}
+
+	public void switchNightMode() {
+		mySun.switchNightMode();
+	}
+
+
+//	private void printArray(double[] arr) {
+//		for (int i = 0; i < arr.length; i++) {
+//			if (debug) System.out.print(arr[i] + ", ");
+//		}
+//		if (debug) System.out.println();
+//	}
+
 }

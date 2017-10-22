@@ -13,29 +13,29 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 import java.nio.file.Paths;
 
-
 /**
- * @author antheny and gladys
+ * @author Antheny and Gladys
  */
+
 public class Game extends JFrame implements GLEventListener, KeyListener{
-	
+
 	/* Debugger mode */
 	private final static boolean debug = false;
 
 
 	private Terrain myTerrain;
 	private Texture textures[];
-	
+
 	private Camera camera;
 	private Avatar avatar;
 	private int shaderProgram;
-	
+
 	private static boolean leftKey;
 	private static boolean rightKey;
 	private static boolean upKey;
 	private static boolean downKey;
 	private static boolean firstPerson;
-	
+
 	public final static int GRASS = 0;
 	public final static int ROAD = 1;
 	public final static int AVATARBODY = 2;
@@ -53,7 +53,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures = new Texture[10];
 		camera = new Camera(myTerrain);
 		avatar = new Avatar(camera);
-		
+
 		leftKey = false;
 		rightKey = false;
 		upKey = false;
@@ -79,7 +79,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		setSize(800, 600);        
 		setVisible(true);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);     
-		
+
 		Game obj = new Game(myTerrain);
 		panel.addKeyListener(obj);
 	}
@@ -100,15 +100,13 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public void display(GLAutoDrawable drawable) {
 		GL2 gl = drawable.getGL().getGL2();
 		gl.glUseProgram(shaderProgram);
-				
+
 		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL2.GL_DEPTH_BUFFER_BIT);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 		gl.glLoadIdentity();
 
-		//double alt = myTerrain.altitude(camera.getPosition()[0], camera.getPosition()[2]);
-
 		avatar.draw(gl, textures);
-		
+
 		myTerrain.draw(gl,textures);
 		gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
 
@@ -150,27 +148,27 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 			e.printStackTrace();
 			System.exit(1);
 		}
-		
+
 		myTerrain.terrainInit();
 
 	}
-	
+
 	private void loadTextures(GL2 gl) {
-		
-		String[] texFileName = {	"textures/grass.png",		//0
-									"textures/road.png",  		//1
-									"textures/minionBody.png", 	//2
-									"textures/minionHead.png", 	//3
-									"textures/minionFeet.png", 	//4
-									"textures/branch.png",  	//5
-									"textures/leaf.png", 		//6
-									"textures/sun.png",			//7
-									"textures/minionRLeg.png", 	//8
-									"textures/minionLLeg.png"	//9
-								};
+
+		String[] texFileName = {	"textures/grass.png",		    //0
+				"textures/road.png",  		//1
+				"textures/minionBody.png", 	//2
+				"textures/minionHead.png", 	//3
+				"textures/minionFeet.png", 	//4
+				"textures/branch.png",    	//5
+				"textures/leaf.png", 		//6
+				"textures/sun.png",			//7
+				"textures/minionRLeg.png", 	//8
+				"textures/minionLLeg.png"	//9
+		};
 
 		String texFileExt = "png";
-		
+
 		textures[GRASS] = new Texture(gl,texFileName[GRASS],texFileExt,true);
 		textures[ROAD] = new Texture(gl,texFileName[ROAD],texFileExt,true);
 		textures[AVATARHEAD] = new Texture(gl, texFileName[AVATARHEAD], texFileExt, true);
@@ -179,8 +177,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures[BRANCH] = new Texture(gl, texFileName[BRANCH], texFileExt, true);
 		textures[LEAF] = new Texture(gl, texFileName[LEAF], texFileExt, true);
 		textures[SUN] = new Texture(gl, texFileName[SUN], texFileExt, true);
-//		textures[AVATARRLEG] = new Texture(gl, texFileName[AVATARRLEG], texFileExt, true);
-//		textures[AVATARLLEG] = new Texture(gl, texFileName[AVATARLLEG], texFileExt, true);
+		//		textures[AVATARRLEG] = new Texture(gl, texFileName[AVATARRLEG], texFileExt, true);
+		//		textures[AVATARLLEG] = new Texture(gl, texFileName[AVATARLLEG], texFileExt, true);
 
 
 	}
@@ -195,28 +193,25 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 			height = 1;
 		}
 
+		// projection setup
 		gl.glMatrixMode(GL2.GL_PROJECTION);
 		gl.glLoadIdentity();
 		glu.gluPerspective(60, width/height, 1, 20);
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 	}
-		
+
 	private void keyControls() {
-		
+
 		if (leftKey) {
-			//System.out.print("left");
 			avatar.turnLeft();
 		}
 		if (rightKey) {
-			//System.out.print("right");
 			avatar.turnRight();
 		}
 		if (upKey) {
-			//System.out.print("up");
 			avatar.moveForward();
 		}
 		if (downKey) {
-			//System.out.print("down");
 			avatar.moveBackward();
 		}
 	}
@@ -226,7 +221,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-	
+
 		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			rightKey = true;
 		}
@@ -260,7 +255,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		
+
 		if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			leftKey = false;
 		}

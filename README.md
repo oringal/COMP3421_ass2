@@ -1,7 +1,25 @@
 # Graphics Assignment 2
-Completed tasks
-Terrain mesh generation
-Terrain altitude interpolation
-Tree - Lysystem generation
+
+Completed tasks:
+
+Terrain - mesh generation
+Terrain - altitude interpolation
+
+Tree - L system generation - Tree objects
+
 Road - Mesh generation
-Camera
+
+Camera - perspective projection (press F to toggle between first and third person)
+Camera - movement (use left, right, up, and down arrow keys to rotate camera left and right, and move forward and backward)
+
+Lighting - Sun.java - setLight() function
+
+Textures - loaded in Game.java, used in respective terrain and avatar (road, terrain, sun, avatar, tree)
+
+Avatar - is a minion made of a cylinder with two rectangular prism legs
+
+Extensions:
+Sun moving (press L to toggle sun animation) - drawSun() in Sun
+Night mode (press N key to toggle night mode)
+Lsystem tree generation (press T to increase depth, press shift T to decrease depth) - Tree generation in rewrite
+

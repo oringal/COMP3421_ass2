@@ -13,8 +13,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 /**
- * @author antheny and gladys
+ * @author Antheny and Gladys
  */
+
 public class LevelIO {
 
 	/**

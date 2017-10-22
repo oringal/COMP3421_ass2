@@ -6,10 +6,11 @@ import java.util.List;
 import com.jogamp.opengl.GL2;
 
 /**
- * @author antheny and gladys
+ * @author Antheny and Gladys
  */
+
 public class Road {
-	private final static boolean debug = false;
+	//private final static boolean debug = false;
 
 	private List<Double> myPoints;
 	private double myWidth;
@@ -120,14 +121,14 @@ public class Road {
 
 		return p;
 	}
-	
+
 	/**
 	 * @param a - the altitude
 	 */
 	public void setAltitude(double a) {
 		altitude = a;
 	}
-	
+
 	public double alt() {
 		return altitude;
 	}
@@ -159,50 +160,50 @@ public class Road {
 		// this should never happen
 		throw new IllegalArgumentException("" + i);
 	}
-	
+
 	public void drawSelf(GL2 gl, Texture[] tex) {
 		double halfWidth = myWidth/2;
-		
+
 		gl.glPushMatrix();
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.ROAD].getTextureId());
 
-        gl.glBegin(GL2.GL_TRIANGLE_STRIP);
-        double[] upVec = new double[] {0,1,0};
-        gl.glNormal3dv(upVec,0);
-        
-        /*
-         * keep track of which half of the texture is being drawn
-         * the texture will start to blend into each half
-         */
-        int c = 0;
-               
-        for (double i = 0; i < size() - 0.02; i+=0.02) {
-        	double[] currP = point(i);
-        	double[] nextP = point(i+0.02);
-        	
-        	double[] vec = new double[] {nextP[0] - currP[0], 0, nextP[1] - currP[1]};
-        	
-        	double[] normal = Util.normalise(Util.cross(vec, upVec));
-        	normal = Util.scaleVector(normal, halfWidth);
-        	
-        	if (c%2==0) {
-            	gl.glTexCoord2d(0, 0);
-                gl.glVertex3d(currP[0] - normal[0], altitude, currP[1] - normal[2]);
-                
-                gl.glTexCoord2d(0, 1);
-                gl.glVertex3d(currP[0] + normal[0], altitude, currP[1] + normal[2]);
-        	} else {
-                gl.glTexCoord2d(0.1, 0);
-                gl.glVertex3d(currP[0] - normal[0], altitude, currP[1] - normal[2]);
-                gl.glTexCoord2d(0.1, 1);
-                gl.glVertex3d(currP[0] + normal[0], altitude, currP[1] + normal[2]);
-        	}
-        	c++;
+		gl.glBegin(GL2.GL_TRIANGLE_STRIP);
+		double[] upVec = new double[] {0,1,0};
+		gl.glNormal3dv(upVec,0);
 
-        }
-        gl.glEnd();
+		/*
+		 * keep track of which half of the texture is being drawn
+		 * the texture will start to blend into each half
+		 */
+		int c = 0;
+
+		for (double i = 0; i < size() - 0.02; i+=0.02) {
+			double[] currP = point(i);
+			double[] nextP = point(i+0.02);
+
+			double[] vec = new double[] {nextP[0] - currP[0], 0, nextP[1] - currP[1]};
+
+			double[] normal = Util.normalise(Util.cross(vec, upVec));
+			normal = Util.scaleVector(normal, halfWidth);
+
+			if (c%2==0) {
+				gl.glTexCoord2d(0, 0);
+				gl.glVertex3d(currP[0] - normal[0], altitude, currP[1] - normal[2]);
+
+				gl.glTexCoord2d(0, 1);
+				gl.glVertex3d(currP[0] + normal[0], altitude, currP[1] + normal[2]);
+			} else {
+				gl.glTexCoord2d(0.1, 0);
+				gl.glVertex3d(currP[0] - normal[0], altitude, currP[1] - normal[2]);
+				gl.glTexCoord2d(0.1, 1);
+				gl.glVertex3d(currP[0] + normal[0], altitude, currP[1] + normal[2]);
+			}
+			c++;
+
+		}
+		gl.glEnd();
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
-        gl.glPopMatrix();
+		gl.glPopMatrix();
 	}
 
 
