@@ -177,8 +177,8 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures[BRANCH] = new Texture(gl, texFileName[BRANCH], texFileExt, true);
 		textures[LEAF] = new Texture(gl, texFileName[LEAF], texFileExt, true);
 		textures[SUN] = new Texture(gl, texFileName[SUN], texFileExt, true);
-		//		textures[AVATARRLEG] = new Texture(gl, texFileName[AVATARRLEG], texFileExt, true);
-		//		textures[AVATARLLEG] = new Texture(gl, texFileName[AVATARLLEG], texFileExt, true);
+		//textures[AVATARRLEG] = new Texture(gl, texFileName[AVATARRLEG], texFileExt, true);
+		//textures[AVATARLLEG] = new Texture(gl, texFileName[AVATARLLEG], texFileExt, true);
 
 
 	}
