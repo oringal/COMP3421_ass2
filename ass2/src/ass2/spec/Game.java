@@ -50,7 +50,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	public Game(Terrain terrain) {
 		super("Assignment 2");
 		myTerrain = terrain;
-		textures = new Texture[10];
+		textures = new Texture[20];
 		camera = new Camera(myTerrain);
 		avatar = new Avatar(camera);
 
@@ -156,15 +156,16 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private void loadTextures(GL2 gl) {
 
 		String[] texFileName = {	"textures/grass.png",		    //0
-				"textures/road.png",  		//1
-				"textures/minionBody.png", 	//2
-				"textures/minionHead.png", 	//3
-				"textures/minionFeet.png", 	//4
-				"textures/branch.png",    	//5
-				"textures/leaf.png", 		//6
-				"textures/sun.png",			//7
-				"textures/minionRLeg.png", 	//8
-				"textures/minionLLeg.png"	//9
+									"textures/road.png",  		//1
+									"textures/minionBody.png", 	//2
+									"textures/minionHead.png", 	//3
+									"textures/minionFeet.png", 	//4
+									"textures/branch.png",    	//5
+									"textures/leaf.png", 		//6
+									"textures/sun.png",			//7
+									"",
+									"textures/minionRLeg.png", 	//8
+									"textures/minionLLeg.png"	//9
 		};
 
 		String texFileExt = "png";
@@ -177,8 +178,12 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures[BRANCH] = new Texture(gl, texFileName[BRANCH], texFileExt, true);
 		textures[LEAF] = new Texture(gl, texFileName[LEAF], texFileExt, true);
 		textures[SUN] = new Texture(gl, texFileName[SUN], texFileExt, true);
-		//		textures[AVATARRLEG] = new Texture(gl, texFileName[AVATARRLEG], texFileExt, true);
-		//		textures[AVATARLLEG] = new Texture(gl, texFileName[AVATARLLEG], texFileExt, true);
+
+		
+		String lLeg = "textures/minionRLeg.png";
+		String rLeg = "textures/minionRLeg.png";
+		textures[AVATARLLEG] = new Texture(gl, lLeg, texFileExt, true);
+		textures[AVATARRLEG] = new Texture(gl, rLeg, texFileExt, true);
 
 
 	}

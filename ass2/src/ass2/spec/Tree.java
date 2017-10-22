@@ -126,7 +126,7 @@ public class Tree {
 			gl.glLineWidth((float)branchSize);
 			gl.glBegin(GL2.GL_LINES);
 			gl.glTexCoord2d(0, 0);
-			gl.glVertex3f(0, 0, 0);
+			gl.glVertex3d(0, 0, 0);
 			gl.glTexCoord2d(0, 0.15);
 			gl.glVertex3d(0, height, 0);
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
