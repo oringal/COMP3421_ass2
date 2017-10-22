@@ -16,7 +16,9 @@ Lighting - Sun.java - setLight() function
 
 Textures - loaded in Game.java, used in respective terrain and avatar (road, terrain, sun, avatar, tree)
 
-Avatar - is a minion made of a cylinder with two rectangular prism legs
+Avatar - is a Minion made of a cylinder with two rectangular prism legs
+
+The Others - In Enemy Class. It's an evil Minion cube, made from VBO's.
 
 Extensions:
 Sun moving (press L to toggle sun animation) - drawSun() in Sun

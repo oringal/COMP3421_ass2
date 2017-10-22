@@ -36,6 +36,11 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 	private static boolean upKey;
 	private static boolean downKey;
 	private static boolean firstPerson;
+	
+//	private static boolean wKey;
+//	private static boolean aKey;
+//	private static boolean dKey;
+//	private static boolean sKey;
 
 	public final static int GRASS = 0;
 	public final static int ROAD = 1;
@@ -54,12 +59,16 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures = new Texture[20];
 		camera = new Camera(myTerrain);
 		avatar = new Avatar(camera);
-		enemy = new Enemy(avatar, myTerrain);
+		enemy = new Enemy(camera, myTerrain);
 
 		leftKey = false;
 		rightKey = false;
 		upKey = false;
 		downKey = false;
+//		wKey = false;
+//		aKey = false;
+//		sKey = false;
+//		dKey= false;
 	}
 
 	/** 
@@ -113,7 +122,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		enemy.draw(gl);
 		gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
 
-		keyControls();
+		keyControls(gl);
 	}
 
 	@Override
@@ -201,7 +210,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		gl.glMatrixMode(GL2.GL_MODELVIEW);
 	}
 
-	private void keyControls() {
+	private void keyControls(GL2 gl) {
 
 		if (leftKey) {
 			avatar.turnLeft();
@@ -215,6 +224,18 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		if (downKey) {
 			avatar.moveBackward();
 		}
+//		if (wKey) {
+//			enemy.moveEnemyForward(gl);
+//		}
+//		if (sKey) {
+//			enemy.moveEnemyBackward(gl);
+//		}
+//		if (aKey) {
+//			enemy.turnEnemyLeft(gl);
+//		}
+//		if (dKey) {
+//			enemy.turnEnemyRight(gl);
+//		}
 	}
 
 	@Override
@@ -251,6 +272,18 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		if (e.getKeyCode() == KeyEvent.VK_N) {
 			myTerrain.switchNightMode();
 		}
+//		if (e.getKeyCode() == KeyEvent.VK_E) {
+//			enemy.toggleMoveWith();
+//		}
+//		if (e.getKeyCode() == KeyEvent.VK_S) {
+//			sKey = true;
+//		}
+//		if (e.getKeyCode() == KeyEvent.VK_A) {
+//			aKey = true;
+//		}
+//		if (e.getKeyCode() == KeyEvent.VK_D) {
+//			dKey = true;
+//		}
 
 	}
 
@@ -272,5 +305,18 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		if (e.getKeyCode() == KeyEvent.VK_F) {
 			firstPerson = false;
 		}
+//		if (e.getKeyCode() == KeyEvent.VK_W) {
+//			wKey = false;
+//		}
+//		if (e.getKeyCode() == KeyEvent.VK_S) {
+//			sKey = false;
+//		}
+//		if (e.getKeyCode() == KeyEvent.VK_A) {
+//			aKey = false;
+//		}
+//		if (e.getKeyCode() == KeyEvent.VK_D) {
+//			dKey = false;
+//		}
+		
 	}
 }

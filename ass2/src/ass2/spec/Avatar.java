@@ -15,8 +15,6 @@ public class Avatar {
 	private static final double AVARTAR_HEIGHT = 2.5f;
 	private static final int SLICES = 32;
 
-	private double moveZ = 0;
-
 	private Camera camera;
 
 	public Avatar(Camera camera) {
@@ -275,12 +273,10 @@ public class Avatar {
 	}
 
 	public void moveForward() {
-		moveZ = moveZ + WALKING_SPEED;
 		camera.moveForward();
 	}
 
 	public void moveBackward() {
-		moveZ = moveZ - WALKING_SPEED;
 		camera.moveBackward();
 	}
 
