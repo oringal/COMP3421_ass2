@@ -85,6 +85,9 @@ public class Avatar {
 			}
 		} gl.glEnd();    
 
+		/**
+		 * Bottom of cylinder
+		 */
 		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARFEET].getTextureId());
 		gl.glBegin(GL2.GL_POLYGON);{
 			for (int i = 0; i < SLICES; i++) {
@@ -96,9 +99,10 @@ public class Avatar {
 				gl.glVertex3d(0.3*Math.cos(angle0), 0.3*Math.sin(angle0), zBack);
 			}
 		} gl.glEnd();
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
 
 		gl.glPopMatrix();
-		
+
 		drawRLeg(gl, tex);
 		drawLLeg(gl, tex);
 	}
@@ -110,59 +114,78 @@ public class Avatar {
 		gl.glPushMatrix();
 
 		gl.glTranslated(0, -2.5, 0);
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARLLEG].getTextureId());
 
-		//gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[Game.AVATARLLEG].getTextureId());
 		gl.glBegin(GL2.GL_QUADS); { 
 			// Top face (y = 1.0f)
 			// Define vertices in counter-clockwise (CCW) order with normal pointing out
 			//gl.glColor3f(0.0f, 1.0f, 0.0f);     // Green
-			gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
-			gl.glVertex3f( (float)(0.1f - offSet), 1.0f, -0.1f);
-			gl.glVertex3f( (float)(0.0f - offSet), 1.0f, -0.1f);
-			gl.glVertex3f( (float)(0.0f - offSet), 1.0f,  0.0f);
-			gl.glVertex3f( (float)(0.1f - offSet), 1.0f,  0.0f);
+			//gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
+//	    	gl.glNormal3d(0,1,0);
+//	    	gl.glTexCoord2d(0, 0);
+//			gl.glVertex3f( (float)(0.1f - offSet), 1.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.0f - offSet), 1.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.0f - offSet), 1.0f,  0.0f);
+//			gl.glVertex3f( (float)(0.1f - offSet), 1.0f,  0.0f);
 
-			// Bottom face (y = -1.0f)
-			//gl.glColor3f(1.0f, 0.5f, 0.0f);     // Orange
-			gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
-			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
-			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
-			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
-			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
-
-			// Front face  (z = 1.0f)
-			//gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
-			gl.glColor3f(0.5f, 0.5f, 0.0f);  // yellow
+//			// Bottom face (y = -1.0f)
+//			//gl.glColor3f(1.0f, 0.5f, 0.0f);     // Orange
+//			//gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
+//	    	gl.glNormal3d(0,-1,0);
+//			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
+//			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
+//
+//			// Front face  (z = 1.0f)
+//			//gl.glColor3f(1.0f, 0.0f, 0.0f);     // Red
+//			//			gl.glColor3f(0.5f, 0.5f, 0.0f);  // yellow
+	    	gl.glNormal3d(0,0,1);
+	    	
+	    	gl.glTexCoord2d(1, 1);
 			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, 0.0f);
+	    	
+			gl.glTexCoord2d(1, 0);
 			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, 0.0f);
+	    	
+			gl.glTexCoord2d(0, 0);
 			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, 0.0f);
+	    	
+			gl.glTexCoord2d(0, 1);
 			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, 0.0f);
 
-			// Back face (z = -1.0f)
-			gl.glColor3f(0.3f, 0.3f, 0.3f);     // Yellow
-			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
-			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
-			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
-			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+//
+//			// Back face (z = -1.0f)
+//			//gl.glColor3f(0.3f, 0.3f, 0.3f);     // Yellow
+//    	    gl.glNormal3d(0,0,-1);
+//			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+//
+//			// Left face (x = -1.0f)
+//			//gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+//			//gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
+//     	    gl.glNormal3d(-1,0,0);
+//			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.0f - offSet),  1.0f,  0.0f);
+//			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
+//
+//			// Right face (x = 1.0f)
+//			//gl.glColor3f(0.3f, 0.3f, 0.3f);     // Magenta
+//			//gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
+//            gl.glNormal3d(1,0,0);
+//			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
+//			gl.glVertex3f( (float)(0.1f- offSet),  0.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
+//			gl.glVertex3f( (float)(0.1f - offSet),  1.0f,  0.0f);
 
-			// Left face (x = -1.0f)
-			//gl.glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-			gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
-			gl.glVertex3f( (float)(0.0f - offSet),  0.0f, -0.1f);
-			gl.glVertex3f( (float)(0.0f - offSet),  1.0f, -0.1f);
-			gl.glVertex3f( (float)(0.0f - offSet),  1.0f,  0.0f);
-			gl.glVertex3f( (float)(0.0f - offSet),  0.0f,  0.0f);
-
-			// Right face (x = 1.0f)
-			//gl.glColor3f(0.3f, 0.3f, 0.3f);     // Magenta
-			gl.glColor3f(0.3f, 0.3f, 0.3f);  // yellow
-			gl.glVertex3f( (float)(0.1f - offSet),  0.0f,  0.0f);
-			gl.glVertex3f( (float)(0.1f - offSet),  0.0f, -0.1f);
-			gl.glVertex3f( (float)(0.1f - offSet),  1.0f, -0.1f);
-			gl.glVertex3f( (float)(0.1f - offSet),  1.0f,  0.0f);
 		} gl.glEnd(); 
 
 		gl.glPopMatrix();
+		gl.glBindTexture(GL2.GL_TEXTURE_2D, 0);
+
 
 	}
 
