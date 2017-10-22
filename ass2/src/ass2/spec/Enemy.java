@@ -1,5 +1,8 @@
 package ass2.spec;
 
+import java.nio.FloatBuffer;
+
+import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
@@ -88,11 +91,25 @@ public class Enemy {
 	};
 	
 	private Texture tex;
+	private Avatar avatar;
+	private Terrain terrain;
+	private static double[] position = new double[2];
 	
 	private int bufferIds[] = new int[4];
-	
+	//These are not vertex buffer objects, they are just java containers
+    FloatBuffer verticesBuffer = Buffers.newDirectFloatBuffer(vertices);
+    FloatBuffer coloursBuffer = Buffers.newDirectFloatBuffer(colours);
+    FloatBuffer normalsBuffer = Buffers.newDirectFloatBuffer(normals);
+
+    public Enemy (Avatar avatar, Terrain terrain) {
+	    	this.avatar = avatar;
+	    	this.terrain = terrain;
+	    	position[0] = terrain.size().getWidth() / 2; 
+	    	position[1] = terrain.size().getHeight() /2;
+    }
+    
 	private void defineTextures(GL2 gl) {
-		String fileName = "evilMinionIcon.png";
+		String fileName = "textures/evilMinionIcon.png";
 		String fileExt = "png";
 
 		tex = new Texture(gl, fileName, fileExt, true);
@@ -105,14 +122,65 @@ public class Enemy {
 		// Generate 1 VBO buffer and get its ID
         gl.glGenBuffers(1, bufferIds, 0);
         
-        // bind a named buffer object
         // This buffer is now the current array buffer
         // array buffers hold vertex attribute data
         gl.glBindBuffer(GL.GL_ARRAY_BUFFER, bufferIds[0]);
 
-        //gl.glBufferData(GL.GL_ARRAY_BUFFER, (headVertices.length*4) + (headTex.length*4) + (headNormals.length*4), null, GL2.GL_STATIC_DRAW);
+        //This is just setting aside enough empty space for all our data
+        //we pass in null for the actual data for now
+        gl.glBufferData(GL2.GL_ARRAY_BUFFER, 
+        		(vertices.length*Float.BYTES) + (normals.length*Float.BYTES) + (colours.length*Float.BYTES), 
+        		null, 
+        		GL2.GL_STATIC_DRAW);
         
-		
+        //Now load vertices data
+        gl.glBufferSubData(GL2.GL_ARRAY_BUFFER, 
+        		0, //From byte offset 0
+        		vertices.length*Float.BYTES, 
+        		verticesBuffer);
+        
+        // load normals data
+        gl.glBufferSubData(GL2.GL_ARRAY_BUFFER, 
+        		vertices.length*Float.BYTES, 
+        		normals.length*Float.BYTES, //Load after the vertices data
+        		normalsBuffer);
+        
+        // load colours data
+        gl.glBufferSubData(GL2.GL_ARRAY_BUFFER, 
+        		(vertices.length*Float.BYTES + normals.length*Float.BYTES), 
+        		colours.length*Float.BYTES, 
+        		coloursBuffer);
+        
+        defineTextures(gl);
+	}
+
+	public void draw(GL2 gl) {
+
+    		// Enable arrays: To tell the graphics pipeline that we want it to use our data
+    		gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.glEnableClientState(GL2.GL_COLOR_ARRAY);
+        gl.glEnableClientState(GL2.GL_NORMAL_ARRAY);
+        
+        //Bind the buffer we want to use
+        gl.glBindBuffer(GL.GL_ARRAY_BUFFER,bufferIds[0]);
+    	
+        // This tells OpenGL the locations for the arrays.
+        gl.glVertexPointer(3, //3 coordinates per vertex 
+		              	  GL.GL_FLOAT, //each co-ordinate is a float 
+		                  0, //There are no gaps in data between co-ordinates 
+		                  0); //Co-ordinates are at the start of the current array buffer
+        gl.glNormalPointer(GL.GL_FLOAT, 0, vertices.length*Float.BYTES);
+        gl.glColorPointer(3, GL.GL_FLOAT, 0, (vertices.length*Float.BYTES + normals.length*Float.BYTES));
+        
+        gl.glBindTexture(GL2.GL_TEXTURE_2D, tex.getTextureId());
+        gl.glDrawArrays(GL2.GL_TRIANGLES, 0, 36);
+        
+        gl.glDisableClientState(GL2.GL_VERTEX_ARRAY);
+        gl.glDisableClientState(GL2.GL_TEXTURE_COORD_ARRAY);
+        gl.glDisableClientState(GL2.GL_NORMAL_ARRAY);
+        
+        // Un-bind the buffer
+        gl.glBindBuffer(GL.GL_ARRAY_BUFFER,0);
 	}
 
 

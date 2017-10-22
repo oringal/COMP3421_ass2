@@ -28,6 +28,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 
 	private Camera camera;
 	private Avatar avatar;
+	private Enemy enemy;
 	private int shaderProgram;
 
 	private static boolean leftKey;
@@ -53,6 +54,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		textures = new Texture[20];
 		camera = new Camera(myTerrain);
 		avatar = new Avatar(camera);
+		enemy = new Enemy(avatar, myTerrain);
 
 		leftKey = false;
 		rightKey = false;
@@ -108,6 +110,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		avatar.draw(gl, textures);
 
 		myTerrain.draw(gl,textures);
+		enemy.draw(gl);
 		gl.glPolygonMode(GL.GL_FRONT_AND_BACK,GL2.GL_FILL);
 
 		keyControls();
@@ -150,6 +153,7 @@ public class Game extends JFrame implements GLEventListener, KeyListener{
 		}
 
 		myTerrain.terrainInit();
+		enemy.setup(gl);
 
 	}
 
