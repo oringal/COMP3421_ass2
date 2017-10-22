@@ -18,7 +18,7 @@ Textures - loaded in Game.java, used in respective terrain and avatar (road, ter
 
 Avatar - is a Minion made of a cylinder with two rectangular prism legs
 
-The Others - In Enemy Class. It's an evil Minion cube, made from VBO's.
+The Others - In Enemy Class. It's an evil Minion cube, made from VBO's. It is just put into the scene. 
 
 Extensions:
 Sun moving (press L to toggle sun animation) - drawSun() in Sun

@@ -7,7 +7,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 
 /**
- * 
+ * Draws an enemy in the world using VBOs
  * @author Antheny and Gladys
  * week 7 triangleVBO lecture code as a starting point/for understanding
  */
@@ -41,10 +41,15 @@ public class Enemy {
 			size,size,-size,
 
 			// left
+//			-size,size,-size,
+//			-size,-size,-size,
+//			-size,-size,size,
+//			-size,size,size,
+			
 			-size,size,size,
-			-size,size,-size,
-			-size,-size,-size,
-			-size,-size,size,
+		      -size,size,-size,
+		      -size,-size,-size,
+		      -size,-size,size,
 
 			// right
 			size,size,-size,
@@ -133,7 +138,7 @@ public class Enemy {
 	private static final double TURNING_SPEED = 2;
 	public boolean moveWith;
 
-	private int bufferIds[] = new int[4];
+	private int bufferIds[] = new int[1];
 	//These are not vertex buffer objects, they are just java containers
 	FloatBuffer verticesBuffer = Buffers.newDirectFloatBuffer(vertices);
 	FloatBuffer textureCoordsBuffer = Buffers.newDirectFloatBuffer(textureCoords);
@@ -149,11 +154,9 @@ public class Enemy {
 	}
 
 	private void defineTextures(GL2 gl) {
-		String fileName = "textures/evilMinionIcon.png";
+		String fileName = "textures/evilMinion.png";
 		String fileName1 = "textures/purpleSquare.png";
 		String fileExt = "png";
-
-
 
 		tex[0] = new Texture(gl, fileName, fileExt, true);
 		tex[1] = new Texture(gl, fileName1, fileExt, true);
@@ -173,26 +176,26 @@ public class Enemy {
 		//This is just setting aside enough empty space for all our data
 		//we pass in null for the actual data for now
 		gl.glBufferData(GL2.GL_ARRAY_BUFFER, 
-				(vertices.length*4) + (normals.length*4) + (textureCoords.length*4), 
+				(vertices.length*Float.BYTES) + (normals.length*Float.BYTES) + (textureCoords.length*Float.BYTES), 
 				null, 
 				GL2.GL_STATIC_DRAW);
 
 		//Now load vertices data
 		gl.glBufferSubData(GL2.GL_ARRAY_BUFFER, 
 				0, //From byte offset 0
-				vertices.length*4, 
+				vertices.length*Float.BYTES, 
 				verticesBuffer);
 
 		// load normals data
 		gl.glBufferSubData(GL2.GL_ARRAY_BUFFER, 
-				vertices.length*4, 
-				normals.length*4, //Load after the vertices data
+				vertices.length*Float.BYTES, 
+				normals.length*Float.BYTES, //Load after the vertices data
 				normalsBuffer);
 
 		// load textureCoords data
 		gl.glBufferSubData(GL2.GL_ARRAY_BUFFER, 
-				(vertices.length*4 + normals.length*4), 
-				textureCoords.length*4, 
+				(vertices.length*Float.BYTES + normals.length*Float.BYTES), 
+				textureCoords.length*Float.BYTES, 
 				textureCoordsBuffer);
 
 		defineTextures(gl);
@@ -205,11 +208,14 @@ public class Enemy {
 //		}
 		
 		gl.glPushMatrix();{
+			gl.glDisable(GL2.GL_CULL_FACE);
+
+			
 //			if (moveWith) {
 //				positionMe(gl);
 //				System.out.print(moveWith);
 //			}
-			
+			gl.glTranslated(-2, 0, 0);
 			// Enable arrays: To tell the graphics pipeline that we want it to use our data
 			gl.glEnableClientState(GL2.GL_VERTEX_ARRAY);
 			gl.glEnableClientState(GL2.GL_COLOR_ARRAY);
@@ -223,31 +229,31 @@ public class Enemy {
 					GL.GL_FLOAT, //each co-ordinate is a float 
 					0, //There are no gaps in data between co-ordinates 
 					0); //Co-ordinates are at the start of the current array buffer
-			gl.glNormalPointer(GL.GL_FLOAT, 0, vertices.length*4);
-			gl.glTexCoordPointer(2, GL.GL_FLOAT, 0, (vertices.length*4 + normals.length*4));
+			gl.glNormalPointer(GL.GL_FLOAT, 0, vertices.length*Float.BYTES);
+			gl.glTexCoordPointer(2, GL.GL_FLOAT, 0, (vertices.length*Float.BYTES + normals.length*Float.BYTES));
 			
 			int offset = 0;
 	
 			// front face (other faces will just be purple)
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[1].getTextureId());
 			gl.glDrawArrays(GL2.GL_QUADS, offset, 4);
-			offset += 4;
+			offset += Float.BYTES;
 	
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[1].getTextureId());
 			gl.glDrawArrays(GL2.GL_QUADS, offset, 4);
-			offset += 4;
+			offset += Float.BYTES;
+	
+			gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[0].getTextureId());
+			gl.glDrawArrays(GL2.GL_QUADS, offset, 4);
+			offset += Float.BYTES;
 	
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[1].getTextureId());
 			gl.glDrawArrays(GL2.GL_QUADS, offset, 4);
-			offset += 4;
-	
-			gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[1].getTextureId());
-			gl.glDrawArrays(GL2.GL_QUADS, offset, 4);
-			offset += 4;
+			offset += Float.BYTES;
 	
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[1].getTextureId());
 			gl.glDrawArrays(GL2.GL_QUADS, 0, 4);
-			offset += 4;
+			offset += Float.BYTES;
 	
 			gl.glBindTexture(GL2.GL_TEXTURE_2D, tex[1].getTextureId());
 			gl.glDrawArrays(GL2.GL_QUADS, offset, 4);
@@ -258,7 +264,8 @@ public class Enemy {
 	
 			// Un-bind the buffer
 			gl.glBindBuffer(GL.GL_ARRAY_BUFFER,0);
-		
+			
+			gl.glEnable(GL2.GL_CULL_FACE);
 		} gl.glPopMatrix();
 	}
 
